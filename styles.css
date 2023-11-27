@@ -1,0 +1,297 @@
+/* fredoka-300 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./fonts/fredoka-v14-latin-300.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* fredoka-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/fredoka-v14-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* fredoka-500 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/fredoka-v14-latin-500.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* fredoka-600 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./fonts/fredoka-v14-latin-600.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* fredoka-700 - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fredoka';
+    font-style: normal;
+    font-weight: 700;
+    src: url('./fonts/fredoka-v14-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+
+/* Reset some default styles for consistency */
+body, h1, h2, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set a playful, futuristic font */
+body {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 300;
+}
+
+/* Define background and text colors */
+body {
+    min-height: 100vh;
+    background-color: #00bfff;
+    color: #333;
+}
+
+/* Header styles */
+header {
+    background-color: #00bfff;
+    color: #fff;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 36px;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #00bfff;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 5px 0;
+}
+
+nav li {
+    margin: 0 5px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Section styles */
+section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+section h2 {
+    font-size: 24px;
+    color: #00bfff;
+    font-weight: 600;
+}
+
+section p {
+    font-size: 16px;
+    margin-bottom: 0.5rem;
+}
+
+/* "Try it now" button styles */
+a {
+    display: inline-block;
+    padding: 10px;
+    background-color: #00bfff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+a:hover {
+    background-color: #0080ff;
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    background-color: #00bfff;
+    color: #fff;
+    padding: 10px 0;
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 28px;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    nav li {
+        margin: 10px 0;
+    }
+
+    section {
+        margin: 10px 0;
+    }
+}
+
+.generator-article {
+    margin: 20px 0;
+    border-radius: 5px;
+    max-width: 800px;
+}
+
+.generator-input-group {
+}
+
+.generator-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.generator-input {
+    color: rgb(55 65 81);
+    line-height: 1.25;
+    padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.generator-input-with-addons {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin-bottom: 16px;
+}
+
+.generator-input-with-addons .generator-input {
+    flex-grow: 1;
+    align-self: stretch;
+    margin: 0;
+    width: unset;
+    border-radius: 5px 0 0 5px;
+    border-right: none;
+}
+
+.generator-input-with-addons .generator-input-addon {
+    flex-grow: 0;
+    border-radius: 0;
+    border-left: none;
+}
+
+.generator-input-with-addons button.generator-input-addon:disabled {
+    background-color: gray;
+}
+
+.generator-input-with-addons button.generator-input-addon:hover {
+    background-color: #0080ff;
+    cursor: pointer;
+}
+
+.generator-input-with-addons button.generator-input-addon:disabled:hover {
+    cursor: progress;
+    background-color: gray;
+}
+
+.generator-input-with-addons .generator-input-addon:last-child {
+    flex-grow: 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.generator-submit-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 16px;
+}
+
+.generator-submit, button {
+    background-color: deepskyblue;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    color: white;
+}
+
+.generator-submit:disabled {
+    background-color: gray;
+}
+
+.generator-submit:hover {
+    background-color: #0080ff;
+    cursor: pointer;
+}
+
+.generator-submit:disabled:hover {
+    cursor: progress;
+    background-color: gray;
+}
+
+.lds-dual-ring.hidden:after {
+    display: none;
+}
+
+.generator-history-select {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 800px;
+    border: 1px solid gray;
+    padding: 4px 20px 4px 8px;
+    border-radius: 4px;
+}
+
+.lds-dual-ring {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid rgb(156 163 175);
+    border-color: rgb(156 163 175) transparent rgb(156 163 175) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

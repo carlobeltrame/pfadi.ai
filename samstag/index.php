@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pfadi.ai - AI Tools für die Pfadi</title>
+  <link rel="stylesheet" href="../styles.css">
+<script>
+  function allInputs() {
+    return [
+      document.querySelector('#title'),
+      document.querySelector('#randomize_title'),
+      document.querySelector('#target_group'),
+      document.querySelector('#story_submit'),
+      document.querySelector('#story'),
+      document.querySelector('#programme_submit'),
+      document.querySelector('#programme'),
+      document.querySelector('#material_submit'),
+      document.querySelector('#material'),
+      document.querySelector('#story_history_select'),
+      document.querySelector('#programme_history_select'),
+      document.querySelector('#material_history_select'),
+    ]
+  }
+
+  function disableAllInputs() {
+    allInputs().forEach(input => input.setAttribute('disabled', ''))
+  }
+
+  function enableAllInputs() {
+    allInputs().forEach(input => input.removeAttribute('disabled'))
+  }
+
+  function setRandomTitle(forceOverwrite = false) {
+    const title = document.querySelector('#title')
+    if (forceOverwrite || title.value === '') {
+      const titleExamples = ['Über den Wolken', 'M-Budget', 'Gangster', 'Mafia', 'Virus', 'Hollywood', 'Alien', 'Facebook', 'Gladiatoren', 'Piraten', 'Horror', 'Wilder Westen', 'Weltreise', 'Zigeuner', 'Kreuzfahrt', 'Schoggi', 'Haribo', 'Hotel', 'Wellness', 'Wikinger', 'Survival', 'Fashion', 'Disney', 'Amerika', 'Unterwasser', 'Geheimagenten', 'Dschungelbuch', 'König der Löwen', 'Indianer', 'Aborigines', 'Samurai', 'Schlümpfe', 'Super Mario', 'Jim Knopf', 'Aladdin', 'Gefängnisausbruch', 'Fussball-WM', 'Atlantis', 'Märchen', 'Jumanji', 'Camping', 'Barbie', 'Hello Kitty', 'Rumpelstilzchen', 'Willhelm Tell', 'Ghost Busters', 'Werwölfe', 'Zwergli', 'Narnia', 'Killer-Eichhörnchen', 'Alibaba', 'Walpurgisnacht', 'Hippigschpängschtli', 'Clown', 'Schlaraffenland', 'Pfadi\'s next Topmodel', 'James Bond', '1001 Nacht', 'Afrika', 'Ägypten', 'Alice im Wunderland', 'Asterix und Obelix', 'Japan', 'China', 'Herr der Ringe', 'Reise durch den Körper', 'Einsame Insel', 'Griechische Götter', 'Römer', 'Schlümpfe', 'Dschungel', 'Einstein', 'Eiszeit', 'Emil und die Detektive', '4 Elemente', 'Fische', 'Flower Power', 'Formel 1', 'Geisterstunde', 'Harry Potter', 'Hogwarts', 'Superhelden', 'Kinderzimmer', 'Indiana Jones', 'Indianer', 'Jahreszeiten', 'Fluch der Karibik', 'Kolumbus', 'Kunstraub', 'Marsupilami', 'Musik', 'Musical', 'Olympische Spiele', 'Peter Pan', 'Piraten', 'Weltreise', 'Riesen und Zwerge', 'Mittelalter', 'Robin Hood', 'Safari', 'Einhörner', 'Über den Regenbogen', 'Weltall', 'Steinzeit', 'Survival-Camp', 'Tim & Struppi', 'Titanic', 'Geheimagenten', 'Wetten dass..?', 'Troja', 'Wikinger', 'Zauberer', 'Zirkus', 'Zoo', 'Zeitreise', 'Biene Maja', 'Bibi Blocksberg', 'Pippi Langstrumpf', 'Jim Knopf', 'Aladdin', 'Alibaba und die 40 Räuber', 'Gangster', 'Die Erfindung des Feuers']
+      title.value = titleExamples[Math.floor(Math.random() * titleExamples.length)]
+      const story = document.querySelector('#story')
+      const programme = document.querySelector('#programme')
+      const material = document.querySelector('#material')
+      const storyHistorySelect = document.querySelector('#story_history_select')
+      const programmeHistorySelect = document.querySelector('#programme_history_select')
+      const materialHistorySelect = document.querySelector('#material_history_select')
+      story.value = ''
+      programme.value = ''
+      material.value = ''
+      storyHistorySelect.value = '0'
+      programmeHistorySelect.value = '0'
+      materialHistorySelect.value = '0'
+    }
+  }
+
+  function saveStory(data) {
+    const key = 'samstag-history-story'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    stored.push(data)
+    localStorage.setItem(key, JSON.stringify(stored))
+    addStoryHistoryEntry(data)
+  }
+
+  function loadStory(event) {
+    const uuid = event.target.value
+    const key = 'samstag-history-story'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    const entry = stored.find(entry => entry.uuid === uuid)
+    if (entry) {
+      displayStory(entry)
+    }
+  }
+
+  function retrieveStory() {
+    const key = 'samstag-history-story'
+    return JSON.parse(localStorage.getItem(key)) || []
+  }
+
+  function addStoryHistoryEntry(entry) {
+    const historySelect = document.querySelector('#story_history_select')
+    const option = document.createElement('option')
+    option.setAttribute('value', entry.uuid)
+    option.appendChild(document.createTextNode(`${entry.title} (${entry.targetGroup}) ${entry.date}`))
+    historySelect.appendChild(option)
+  }
+
+  function displayStory(data) {
+    const title = document.querySelector('#title')
+    const targetGroup = document.querySelector('#target_group')
+    const story = document.querySelector('#story')
+    const programme = document.querySelector('#programme')
+    const programmeHistorySelect = document.querySelector('#programme_history_select')
+    const material = document.querySelector('#material')
+    const materialHistorySelect = document.querySelector('#material_history_select')
+    title.value = data.title
+    targetGroup.value = data.targetGroup.toLowerCase()
+    story.value = data.message
+    programme.value = ''
+    programmeHistorySelect.value = '0'
+    material.value = ''
+    materialHistorySelect.value = '0'
+  }
+
+  async function requestStory(e) {
+    e.preventDefault()
+    const spinner = document.querySelector('#story_spinner')
+    const story = document.querySelector('#story')
+    const programme = document.querySelector('#programme')
+    const material = document.querySelector('#material')
+    const storyHistorySelect = document.querySelector('#story_history_select')
+    const storyForm = e.target
+    // We have to retrieve the data before disabling the inputs, otherwise no data is retrieved
+    const data = new URLSearchParams(new FormData(storyForm))
+    disableAllInputs()
+    spinner.classList.remove('hidden')
+    story.value = ''
+    programme.value = ''
+    material.value = ''
+    storyHistorySelect.value = '0'
+    const source = new EventSource('./requestStory.php?' + data.toString())
+    source.addEventListener('data', function (event) {
+      const data = JSON.parse(event.data)
+      displayStory(data)
+      if (data.finished) {
+        source.close()
+        saveStory(data)
+        storyHistorySelect.value = data.uuid
+        spinner.classList.add('hidden')
+        enableAllInputs()
+      }
+    })
+    return false
+  }
+
+  function saveProgramme(data) {
+    const key = 'samstag-history-programme'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    stored.push(data)
+    localStorage.setItem(key, JSON.stringify(stored))
+    addProgrammeHistoryEntry(data)
+  }
+
+  function loadProgramme(event) {
+    const uuid = event.target.value
+    const key = 'samstag-history-programme'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    const entry = stored.find(entry => entry.uuid === uuid)
+    if (entry) {
+      displayProgramme(entry)
+    }
+  }
+
+  function retrieveProgramme() {
+    const key = 'samstag-history-programme'
+    return JSON.parse(localStorage.getItem(key)) || []
+  }
+
+  function addProgrammeHistoryEntry(entry) {
+    const historySelect = document.querySelector('#programme_history_select')
+    const option = document.createElement('option')
+    option.setAttribute('value', entry.uuid)
+    option.appendChild(document.createTextNode(`${entry.title} (${entry.targetGroup}) ${entry.date}`))
+    historySelect.appendChild(option)
+  }
+
+  function displayProgramme(data) {
+    const title = document.querySelector('#title')
+    const targetGroup = document.querySelector('#target_group')
+    const story = document.querySelector('#story')
+    const programme = document.querySelector('#programme')
+    const storyHistorySelect = document.querySelector('#story_history_select')
+    const material = document.querySelector('#material')
+    const materialHistorySelect = document.querySelector('#material_history_select')
+    title.value = data.title
+    targetGroup.value = data.targetGroup.toLowerCase()
+    story.value = data.story
+    programme.value = data.message
+    storyHistorySelect.value = '0'
+    material.value = ''
+    materialHistorySelect.value = '0'
+  }
+
+  async function requestProgramme(e) {
+    e.preventDefault()
+    const spinner = document.querySelector('#programme_spinner')
+    const programme = document.querySelector('#programme')
+    const programmeHistorySelect = document.querySelector('#programme_history_select')
+    const storyForm = document.querySelector('#story_form')
+    const programmeForm = e.target
+    if ((!storyForm.reportValidity()) || (!programmeForm.reportValidity())) {
+      console.log('not valid')
+      return false
+    }
+    // We have to retrieve the data before disabling the inputs, otherwise no data is retrieved
+    const data = new URLSearchParams(mergeFormData(storyForm, programmeForm))
+    disableAllInputs()
+    spinner.classList.remove('hidden')
+    programme.value = ''
+    programmeHistorySelect.value = '0'
+    const source = new EventSource('./requestProgramme.php?' + data.toString())
+    source.addEventListener('data', function (event) {
+      const data = JSON.parse(event.data)
+      displayProgramme(data)
+      if (data.finished) {
+        source.close()
+        saveProgramme(data)
+        programmeHistorySelect.value = data.uuid
+        spinner.classList.add('hidden')
+        enableAllInputs()
+      }
+    })
+    return false
+  }
+
+  function saveMaterial(data) {
+    const key = 'samstag-history-material'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    stored.push(data)
+    localStorage.setItem(key, JSON.stringify(stored))
+    addMaterialHistoryEntry(data)
+  }
+
+  function loadMaterial(event) {
+    const uuid = event.target.value
+    const key = 'samstag-history-material'
+    const stored = JSON.parse(localStorage.getItem(key)) || []
+    const entry = stored.find(entry => entry.uuid === uuid)
+    if (entry) {
+      displayMaterial(entry)
+    }
+  }
+
+  function retrieveMaterial() {
+    const key = 'samstag-history-material'
+    return JSON.parse(localStorage.getItem(key)) || []
+  }
+
+  function addMaterialHistoryEntry(entry) {
+    const historySelect = document.querySelector('#material_history_select')
+    const option = document.createElement('option')
+    option.setAttribute('value', entry.uuid)
+    option.appendChild(document.createTextNode(`${entry.title} (${entry.targetGroup}) ${entry.date}`))
+    historySelect.appendChild(option)
+  }
+
+  function displayMaterial(data) {
+    const title = document.querySelector('#title')
+    const targetGroup = document.querySelector('#target_group')
+    const story = document.querySelector('#story')
+    const programme = document.querySelector('#programme')
+    const material = document.querySelector('#material')
+    const storyHistorySelect = document.querySelector('#story_history_select')
+    const programmeHistorySelect = document.querySelector('#programme_history_select')
+    title.value = data.title
+    targetGroup.value = data.targetGroup.toLowerCase()
+    story.value = data.story
+    programme.value = data.programme
+    material.value = data.message
+    storyHistorySelect.value = '0'
+    programmeHistorySelect.value = '0'
+  }
+
+  async function requestMaterial(e) {
+    e.preventDefault()
+    const spinner = document.querySelector('#material_spinner')
+    const material = document.querySelector('#material')
+    const materialHistorySelect = document.querySelector('#material_history_select')
+    const storyForm = document.querySelector('#story_form')
+    const programmeForm = document.querySelector('#programme_form')
+    const materialForm = e.target
+    if ((!storyForm.reportValidity()) || (!materialForm.reportValidity())) {
+      return false
+    }
+    // We have to retrieve the data before disabling the inputs, otherwise no data is retrieved
+    const data = new URLSearchParams(mergeFormData(storyForm, programmeForm, materialForm))
+    disableAllInputs()
+    spinner.classList.remove('hidden')
+    material.value = ''
+    materialHistorySelect.value = '0'
+    const source = new EventSource('./requestMaterial.php?' + data.toString())
+    source.addEventListener('data', function (event) {
+      const data = JSON.parse(event.data)
+      displayMaterial(data)
+      if (data.finished) {
+        source.close()
+        saveMaterial(data)
+        materialHistorySelect.value = data.uuid
+        spinner.classList.add('hidden')
+        enableAllInputs()
+      }
+    })
+    return false
+  }
+
+  function mergeFormData(...forms) {
+    const formData = new FormData()
+    forms.forEach(form => {
+      for(entry of (new FormData(form)).entries()) {
+        formData.append(entry[0], entry[1])
+      }
+    })
+    return formData
+  }
+
+  window.onload = () => {
+    setRandomTitle(false)
+    retrieveStory().forEach((entry) => {
+      addStoryHistoryEntry(entry)
+    })
+    retrieveProgramme().forEach((entry) => {
+      addProgrammeHistoryEntry(entry)
+    })
+    retrieveMaterial().forEach((entry) => {
+      addMaterialHistoryEntry(entry)
+    })
+  }
+</script>
+</head>
+<body>
+<header>
+  <a href="https://pfadi.ai"><h1>pfadi.ai - AI Tools für die Pfadi</h1></a>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="https://pfadinamen.app">Pfadinamen</a></li>
+    <li><a href="/samstag">Pfadiprogramm</a></li>
+    <li><a href="/kursblock">Kursblöcke</a></li>
+  </ul>
+</nav>
+
+<section id="main">
+<div class="font-sans">
+  <h2>Aktivitäts-AI</h2>
+</div>
+
+<article id="block" class="generator-article">
+  <form id="story_form" onsubmit="return requestStory(event)">
+    <div class="generator-input-group">
+      <label for="title" class="generator-label">Thema</label>
+      <div class="generator-input-with-addons">
+        <input type="text" id="title" name="title" class="generator-input" required maxlength="128">
+        <button type="button" id="randomize_title" class="generator-input-addon" onclick="setRandomTitle(true)">Zufälliges Thema</button>
+      </div>
+    </div>
+    <div class="generator-input-group">
+      <label for="target_group" class="generator-label">Stufe</label>
+      <select id="target_group" class="generator-input" name="target_group" required>
+        <option value="biberstufe">Biberstufe</option>
+        <option value="wolfsstufe" selected>Wolfsstufe</option>
+        <option value="pfadistufe">Pfadistufe</option>
+      </select>
+    </div>
+    <div class="generator-submit-row">
+      <button id="story_submit" type="submit" class="generator-submit">Roten Faden generieren und 4 Rappen von Cosinus verbrauchen</button>
+      <div id="story_spinner" class="lds-dual-ring hidden"></div>
+    </div>
+  </form>
+  <form id="programme_form" onsubmit="return requestProgramme(event)">
+    <label for="story" class="generator-label">Roter Faden</label>
+    <textarea id="story" name="story" class="generator-input" rows="10" required="required"></textarea>
+    <div class="generator-submit-row">
+      <button  id="programme_submit" type="submit" class="generator-submit">Aktivitätsprogramm generieren und 12 Rappen von Cosinus verbrauchen</button>
+      <div id="programme_spinner" class="lds-dual-ring hidden"></div>
+    </div>
+  </form>
+  <form id="material_form" onsubmit="return requestMaterial(event)">
+    <label for="programme" class="generator-label">Aktivitätsprogramm</label>
+    <textarea id="programme" name="programme" class="generator-input" rows="20" required="required"></textarea>
+    <div class="generator-submit-row">
+      <button  id="material_submit" type="submit" class="generator-submit">Benötigtes Material auflisten und 12 Rappen von Cosinus verbrauchen</button>
+      <div id="material_spinner" class="lds-dual-ring hidden"></div>
+    </div>
+  </form>
+  <label for="material" class="generator-label">Benötigtes Material</label>
+  <textarea id="material" name="material" class="generator-input" rows="10"></textarea>
+</article>
+<p>
+  Der rote Faden, das Aktivitätsprogramm und das benötigte Material werden mit ChatGPT generiert. Das Generieren kann bis zu 60 Sekunden dauern, und kostet den Autor dieser Webseite (Cosinus) echtes Geld. Wenn du den Generator viel benützt, kannst du etwas dafür twinten: null sibä nüün, drüü acht sächs, sächs sibä, null sächs.
+</p>
+<p>
+  Achtung: Für die Qualität, Machbarkeit und Vollständigkeit der generierten Inhalte wird keinerlei Garantie übernommen. Die Inhalte sollten in jedem Fall noch von erfahrenen Leitenden gegengelesen werden. Dieser Generator ist ein Experiment, wie weit die aktuellen AI-Tools bereits für Pfadi-Themen nutzbar sind.
+</p>
+<p><small>
+  Bitte keine personenbezogenen Daten in die Felder eingeben. Alle generierten Inhalte und dazugehörigen Eingaben (Thema, Stufe, roter Faden, Aktivitätsprogramm, Material) werden beim Generieren zur Qualitätssicherung und Kontrolle der Kosten serverseitig gespeichert.
+</small></p>
+<p>
+<label for="story_history_select">Bereits generierte Rote Faden wieder aufrufen</label>
+<select id="story_history_select" class="generator-history-select" onchange="loadStory(event)">
+  <option value="0">-</option>
+</select>
+</p>
+<p>
+<label for="programme_history_select">Bereits generiertes Aktivitätsprogramm wieder aufrufen</label>
+<select id="programme_history_select" class="generator-history-select" onchange="loadProgramme(event)">
+  <option value="0">-</option>
+</select>
+</p>
+<p>
+  <label for="material_history_select">Vollständige Aktivitäten inkl. Material wieder aufrufen</label>
+  <select id="material_history_select" class="generator-history-select" onchange="loadMaterial(event)">
+    <option value="0">-</option>
+  </select>
+</p>
+</section>
+
+<footer>
+  <p>&copy; 2023 pfadi.ai - AI Tools für die Pfadi</p>
+</footer>
+</body>
