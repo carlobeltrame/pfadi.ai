@@ -23,6 +23,22 @@ function renderSSE($data, $eventName = 'data') {
     return implode("\n", $event) . "\n\n";
 }
 
+function calculateCost($input, $output) {
+    $costs = [
+        'gpt-4-1106-preview' => [ 'input' => 0.01, 'output' => 0.03 ],
+        'gpt-4' => [ 'input' => 0.01, 'output' => 0.03 ],
+        'gpt-3-1106-preview' => [ 'input' => 0.01, 'output' => 0.03 ],
+        'gpt-3' => [ 'input' => 0.01, 'output' => 0.03 ],
+    ];
+    $cost = $costs[$_ENV['OPENAI_MODEL_NAME']] ?? $costs['gpt-4-1106-preview'];
+
+    // Calculate usage, because OpenAI does not report usage on streamed responses
+    $tokenizer = new Gioni06\Gpt3Tokenizer\Gpt3Tokenizer(new Gioni06\Gpt3Tokenizer\Gpt3TokenizerConfig());
+    $inputTokens = $tokenizer->encode($input);
+    $outputTokens = $tokenizer->encode($output);
+    return count($inputTokens) * $cost['input'] / 1000 + count($outputTokens) * $cost['output'] / 1000;
+}
+
 $targetGroups = [
     'biberstufe' => 'Biberstufe',
     'wolfsstufe' => 'Wolfsstufe',
@@ -87,7 +103,7 @@ Schreibe nun eine Story zu folgendem Thema:" ],
 ];
 
 $stream = $client->chat()->createStreamed([
-    'model' => 'gpt-4',
+    'model' => $_ENV['OPENAI_MODEL_NAME'],
     'messages' => $messages,
     'max_tokens' => 512,
 ]);
@@ -119,20 +135,13 @@ foreach ($stream as $result) {
     flush();
 }
 
-// Calculate usage, because OpenAI does not report usage on streamed responses
-$tokenizer = new Gioni06\Gpt3Tokenizer\Gpt3Tokenizer(new Gioni06\Gpt3Tokenizer\Gpt3TokenizerConfig());
-$input = $messages[0]['content'] . "\n" . $messages[1]['content'];
-$output = $data['message'];
-$inputTokens = $tokenizer->encode($input);
-$outputTokens = $tokenizer->encode($output);
-$cost = count($inputTokens) * 0.03 / 1000 + count($outputTokens) * 0.06 / 1000;
-
 $host = $_ENV['MYSQL_HOST'];
 $port = $_ENV['MYSQL_PORT'];
 $dbname = $_ENV['MYSQL_DATABASE'];
 $user = $_ENV['MYSQL_USER'];
 $password = $_ENV['MYSQL_PASSWORD'];
 if ($host && $dbname && $user && $password) {
+    $cost = calculateCost($messages[0]['content'] . "\n" . $messages[1]['content'], $data['message']);
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
