@@ -164,7 +164,8 @@ Das Programm sollte in sich abgeschlossen sein und in ca. {$activityTime} durchf
 
 Beispiel:
 {$example}
-" ],
+
+Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Thema: {$title}\nStory:\n{$story}\n\nProgramm zu diesem Thema und dieser Story:\n"],
 ];
 

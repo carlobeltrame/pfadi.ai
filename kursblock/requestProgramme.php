@@ -137,7 +137,8 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen
 
 ${example}
-" ],
+
+Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Blocktitel: ${title}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
 ];
 

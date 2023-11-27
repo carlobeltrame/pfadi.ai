@@ -98,7 +98,7 @@ Die Story sollte maximal 2 Abschnitte lang sein, sollte in sich abgeschlossen se
 Beispiel:
 {$example}
 
-Schreibe nun eine Story zu folgendem Thema:" ],
+Schreibe nun eine Story zu folgendem Thema. Gib ausschiesslich den Story-Text aus, wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Thema: {$title}\nStory:"],
 ];
 

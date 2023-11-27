@@ -235,7 +235,8 @@ Die Materialliste sollte möglichst vollständig sein, und falls sinnvoll auch e
 
 Beispiel:
 {$example}
-" ],
+
+Liste nun alles nötige Material für folgendes Programm auf. Gib ausschliesslich das Material als Aufzählung aus, wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Thema: {$title}\nProgramm:\n{$programme}\n\nVollständiges benötigtes Material für dieses Programm:\n"],
 ];
 
