@@ -11,6 +11,7 @@
       document.querySelector('#title'),
       document.querySelector('#age_group'),
       document.querySelector('#target_group'),
+      document.querySelector('#contents'),
       document.querySelector('#goals_submit'),
       document.querySelector('#goals'),
       document.querySelector('#programme_submit'),
@@ -63,12 +64,14 @@
     const title = document.querySelector('#title')
     const ageGroup = document.querySelector('#age_group')
     const targetGroup = document.querySelector('#target_group')
+    const contents = document.querySelector('#contents')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
     const programmeHistorySelect = document.querySelector('#programme_history_select')
     title.value = data.title
     ageGroup.value = data.ageGroup
     targetGroup.value = data.targetGroup.toLowerCase()
+    contents.value = data.contents || ''
     goals.value = data.message
     programme.value = ''
     programmeHistorySelect.value = '0'
@@ -138,12 +141,14 @@
     const title = document.querySelector('#title')
     const ageGroup = document.querySelector('#age_group')
     const targetGroup = document.querySelector('#target_group')
+    const contents = document.querySelector('#contents')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
     const goalsHistorySelect = document.querySelector('#goals_history_select')
     title.value = data.title
     ageGroup.value = data.ageGroup
     targetGroup.value = data.targetGroup.toLowerCase()
+    contents.value = data.contents || ''
     goals.value = data.goals
     programme.value = data.message
     goalsHistorySelect.value = '0'
@@ -202,7 +207,7 @@
 </head>
 <body>
 <header>
-  <a href="/"><h1>pfadi.ai - AI Tools für die Pfadi</h1></a>
+  <h1><a href="/">pfadi.ai - AI Tools für die Pfadi</a></h1>
 </header>
 
 <nav>
@@ -245,6 +250,10 @@
         <option value="gemischt" selected="selected">gemischt Wolfsstufe - Pfadistufe</option>
         <option value="piostufe">Piostufe</option>
       </select>
+    </div>
+    <div class="generator-input-group">
+      <label for="contents" class="generator-label">Ausbildungsinhalte <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=29" target="_blank">[was ist das?]</a></small></label>
+      <input type="text" id="contents" name="contents" class="generator-input" required maxlength="256">
     </div>
     <div class="generator-submit-row">
       <button id="goals_submit" type="submit" class="generator-submit">Blockziele generieren und 3 Rappen von Cosinus verbrauchen</button>

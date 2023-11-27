@@ -47,7 +47,7 @@
 /* Reset some default styles for consistency */
 body, h1, h2, p, ul {
     margin: 0;
-    padding: 0;
+    padding: 5px;
 }
 
 /* Set a playful, futuristic font */
@@ -118,7 +118,7 @@ section p {
 }
 
 /* "Try it now" button styles */
-a {
+a.cta {
     display: inline-block;
     padding: 10px;
     background-color: #00bfff;
@@ -129,8 +129,23 @@ a {
     transition: background-color 0.3s ease;
 }
 
+a.cta:hover {
+    background-color: #0080ff;
+}
+
+a {
+    padding: 0.2rem;
+    color: inherit;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
 a:hover {
     background-color: #0080ff;
+}
+
+small {
+    font-size: 75%;
 }
 
 /* Footer styles */
@@ -207,6 +222,7 @@ footer {
     flex-grow: 0;
     border-radius: 0;
     border-left: none;
+    transition: background-color 0.3s ease;
 }
 
 .generator-input-with-addons button.generator-input-addon:disabled {
@@ -241,6 +257,7 @@ footer {
     border-radius: 4px;
     border: none;
     color: white;
+    transition: background-color 0.3s ease;
 }
 
 .generator-submit:disabled {

@@ -80,6 +80,7 @@ $ageAndCourseGoal = $agesAndCourseGoals[$_GET['age_group']] ?? $agesAndCourseGoa
 
 $examples = [
     '16-17_basis' => "Blocktitel: Stufengerechtigkeit und Bedürfnisse
+Ausbildungsinhalte: Pfadistufengerechtigkeit, Aktivitäten für Pfadistufe anpassen
 Blockziele:
 - Die TN können Aktivitätsbeispiele nach Tauglichkeit für die Pfadistufe beurteilen
 - Die TN können Aktivitätsbeispiele für die Pfadistufe anpassen.
@@ -112,6 +113,7 @@ if (is_array($example)) {
 }
 
 $title = $_GET['title'];
+$contents = $_GET['contents'];
 $goals = $_GET['goals'];
 $messages = [
     ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. ${ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
@@ -139,7 +141,7 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 ${example}
 
 Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
-    ['role' => 'user', 'content' => "Blocktitel: ${title}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
+    ['role' => 'user', 'content' => "Blocktitel: ${title}\nAusbildungsinhalte: ${contents}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
 ];
 
 $stream = $client->chat()->createStreamed([
@@ -160,6 +162,7 @@ $data = [
     'ageGroup' => $_GET['age_group'],
     'targetGroup' => $_GET['target_group'],
     'courseType' => $courseType,
+    'contents' => $contents,
     'goals' => $goals,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
@@ -188,7 +191,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, goals, programme, cost) VALUES (?,?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, contents, goals, programme, cost) VALUES (?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['goals'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['contents'], $data['goals'], $data['message'], $cost]);
 }

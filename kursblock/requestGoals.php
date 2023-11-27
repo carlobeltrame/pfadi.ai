@@ -82,6 +82,7 @@ $ageAndCourseGoal = $agesAndCourseGoals[$_GET['age_group']] ?? $agesAndCourseGoa
 $examples = [
     '16-17_basis' => "Beispiel:
 Blocktitel: Einführung SiKo
+Ausbildungsinhalte: Sicherheitsrelevante Aktivitäten, Aktivitäten im Sicherheitsbereich, 3x3, SiKo-Vorlagen aus der Broschüre
 Blockziele:
 Die TN können für vorgegebene Aktivitäten unterscheiden, ob sie sicherheitsrelevant sind, ob sie im Sicherheitsbereich sind, ob sie nicht erlaubt sind oder ob sie kein SiKo benötigen.
 Die TN können für eine vorgegebene Aktivität (und Rekkbericht) die ersten zwei Zeilen des 3x3 ausfüllen.
@@ -90,6 +91,7 @@ Die TN können in eigenen Worten die Anforderungen bei einigen üblichen sicherh
 
 Weiteres Beispiel:
 Blocktitel: Stufengerechtigkeit und Bedürfnisse
+Ausbildungsinhalte: Pfadistufengerechtigkeit, Aktivitäten für Pfadistufe anpassen
 Blockziele:
 - Die TN können Aktivitätsbeispiele nach Tauglichkeit für die Pfadistufe beurteilen
 - Die TN können Aktivitätsbeispiele für die Pfadistufe anpassen.",
@@ -101,6 +103,7 @@ Blockziele:
 
 Weiteres Beispiel:
 Blocktitel: Betreuungsnetzwerk für Stufenleitungen
+Ausbildungsinhalte: Betreuungsnetzwerk, Funktion der Stufenleitung
 Blockziele:
 - Die TN können ihre Funktion und Aufgaben als Stufenleitung beschreiben.
 - Die TN können angeben, an welche Instanz im Betreuungsnetzwerk sie sich wenden können.
@@ -113,6 +116,7 @@ if (is_array($example)) {
 }
 
 $title = $_GET['title'];
+$contents = $_GET['contents'];
 $messages = [
     ['role' => 'system', 'content' => "Schreibe Blockziele (Lernziele) für einen Ausbildungsblock (Lektion) in einem Pfadi-Ausbildungskurs. ${ageAndCourseGoal}
 
@@ -139,7 +143,7 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 ${example}
 
 Schreibe nun Blockziele zum folgenden Ausbildungsblock. Gib ausschliesslich die Blockziele als Aufzählung aus, wie im Beispiel oben." ],
-    ['role' => 'user', 'content' => "Blocktitel: ${title}\nBlockziele:\n"],
+    ['role' => 'user', 'content' => "Blocktitel: ${title}\nAusbildungsinhalte: ${contents}\nBlockziele:\n"],
 ];
 
 $stream = $client->chat()->createStreamed([
@@ -160,6 +164,7 @@ $data = [
     'ageGroup' => $_GET['age_group'],
     'targetGroup' => $_GET['target_group'],
     'courseType' => $courseType,
+    'contents' => $contents,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
 ];
@@ -187,7 +192,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, goals, cost) VALUES (?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, contents, goals, cost) VALUES (?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['contents'], $data['message'], $cost]);
 }
