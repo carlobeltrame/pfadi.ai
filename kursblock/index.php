@@ -202,7 +202,7 @@
 </head>
 <body>
 <header>
-  <a href="https://pfadi.ai"><h1>pfadi.ai - AI Tools für die Pfadi</h1></a>
+  <a href="/"><h1>pfadi.ai - AI Tools für die Pfadi</h1></a>
 </header>
 
 <nav>
