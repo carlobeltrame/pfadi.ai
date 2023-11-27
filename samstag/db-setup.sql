@@ -1,5 +1,5 @@
 CREATE TABLE `samstag_stories` (
-                                   `id` int(11) NOT NULL,
+                                   `id` int(11) NOT NULL AUTO_INCREMENT,
                                    `title` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `story` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE `samstag_stories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `samstag_programme` (
-                                     `id` int(11) NOT NULL,
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
                                      `title` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `story` text COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `samstag_programme` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `samstag_material` (
-                                    `id` int(11) NOT NULL,
+                                    `id` int(11) NOT NULL AUTO_INCREMENT,
                                     `title` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
                                     `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                     `story` text COLLATE utf8mb4_unicode_ci NOT NULL,

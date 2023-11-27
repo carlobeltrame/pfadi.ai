@@ -116,6 +116,7 @@ if (is_array($example)) {
 }
 
 $title = $_GET['title'];
+$motto = $_GET['motto'];
 $contents = $_GET['contents'];
 $messages = [
     ['role' => 'system', 'content' => "Schreibe Blockziele (Lernziele) für einen Ausbildungsblock (Lektion) in einem Pfadi-Ausbildungskurs. ${ageAndCourseGoal}
@@ -164,6 +165,7 @@ $data = [
     'ageGroup' => $_GET['age_group'],
     'targetGroup' => $_GET['target_group'],
     'courseType' => $courseType,
+    'motto' => $motto,
     'contents' => $contents,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
@@ -192,7 +194,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, contents, goals, cost) VALUES (?,?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, motto, contents, goals, cost) VALUES (?,?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['contents'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['message'], $cost]);
 }

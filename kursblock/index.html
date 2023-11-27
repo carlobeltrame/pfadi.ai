@@ -11,6 +11,7 @@
       document.querySelector('#title'),
       document.querySelector('#age_group'),
       document.querySelector('#target_group'),
+      document.querySelector('#motto'),
       document.querySelector('#contents'),
       document.querySelector('#goals_submit'),
       document.querySelector('#goals'),
@@ -56,7 +57,8 @@
     const historySelect = document.querySelector('#goals_history_select')
     const option = document.createElement('option')
     option.setAttribute('value', entry.uuid)
-    option.appendChild(document.createTextNode(`${entry.title} (${entry.courseType}) ${entry.date}`))
+    const entryName = entry.motto ? `${entry.title} (${entry.courseType} ${entry.motto}) ${entry.date}` : `${entry.title} (${entry.courseType}) ${entry.date}`
+    option.appendChild(document.createTextNode(entryName))
     historySelect.appendChild(option)
   }
 
@@ -64,6 +66,7 @@
     const title = document.querySelector('#title')
     const ageGroup = document.querySelector('#age_group')
     const targetGroup = document.querySelector('#target_group')
+    const motto = document.querySelector('#motto')
     const contents = document.querySelector('#contents')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
@@ -71,6 +74,7 @@
     title.value = data.title
     ageGroup.value = data.ageGroup
     targetGroup.value = data.targetGroup.toLowerCase()
+    motto.value = data.motto || ''
     contents.value = data.contents || ''
     goals.value = data.message
     programme.value = ''
@@ -133,7 +137,8 @@
     const historySelect = document.querySelector('#programme_history_select')
     const option = document.createElement('option')
     option.setAttribute('value', entry.uuid)
-    option.appendChild(document.createTextNode(`${entry.title} (${entry.courseType}) ${entry.date}`))
+    const entryName = entry.motto ? `${entry.title} (${entry.courseType} ${entry.motto}) ${entry.date}` : `${entry.title} (${entry.courseType}) ${entry.date}`
+    option.appendChild(document.createTextNode(entryName))
     historySelect.appendChild(option)
   }
 
@@ -141,6 +146,7 @@
     const title = document.querySelector('#title')
     const ageGroup = document.querySelector('#age_group')
     const targetGroup = document.querySelector('#target_group')
+    const motto = document.querySelector('#motto')
     const contents = document.querySelector('#contents')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
@@ -148,6 +154,7 @@
     title.value = data.title
     ageGroup.value = data.ageGroup
     targetGroup.value = data.targetGroup.toLowerCase()
+    motto.value = data.motto || ''
     contents.value = data.contents || ''
     goals.value = data.goals
     programme.value = data.message
@@ -250,6 +257,10 @@
         <option value="gemischt" selected="selected">gemischt Wolfsstufe - Pfadistufe</option>
         <option value="piostufe">Piostufe</option>
       </select>
+    </div>
+    <div class="generator-input-group">
+      <label for="motto" class="generator-label">Kurs-Einkleidung (optional) <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=26" target="_blank">[was ist das?]</a></small></label>
+      <input type="text" id="motto" name="motto" class="generator-input" maxlength="256">
     </div>
     <div class="generator-input-group">
       <label for="contents" class="generator-label">Ausbildungsinhalte <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=29" target="_blank">[was ist das?]</a></small></label>

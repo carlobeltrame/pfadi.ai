@@ -79,7 +79,9 @@ $agesAndCourseGoals = [
 $ageAndCourseGoal = $agesAndCourseGoals[$_GET['age_group']] ?? $agesAndCourseGoals['16-17_basis'];
 
 $examples = [
-    '16-17_basis' => "Blocktitel: Stufengerechtigkeit und Bedürfnisse
+    '16-17_basis' => [
+        'with_motto' => "Blocktitel: Stufengerechtigkeit und Bedürfnisse
+Kurs-Einkleidung: Harry Potter
 Ausbildungsinhalte: Pfadistufengerechtigkeit, Aktivitäten für Pfadistufe anpassen
 Blockziele:
 - Die TN können Aktivitätsbeispiele nach Tauglichkeit für die Pfadistufe beurteilen
@@ -105,8 +107,48 @@ Dann machen wir 4 neue Expertengruppen (anhand der Kartenfarbe neu zusammensetze
 Je zwei der vier Gruppen gehen zusammen in einen Raum. Die TN der einen Gruppe bekommen ein Aktivitätsbeispiel von der Kursleitung vorgegeben, und spielen dieses in einem Rollenspiel vor. Die TN der anderen Gruppe schauen zu, beurteilen mithilfe ihrer Zauberformel, ob diese Aktivität pfadistufengerecht ist, und machen Verbesserungsvorschläge, wie die Aktivität angepasst werden könnte.
 ### Abschliessen:
 Wir legen Fantasy-Bilder aus. Die TN sollen sich alle ein Bild aussuchen, und der Reihe nach sagen, was ihr Bild mit dem gerade erlebten Block zu tun hat.",
+        'without_motto' => "Blocktitel: SiKo Theorie / sicherheitsrelevante Aktivitäten
+Ausbildungsinhalte: Wo benötige ich ein SiKo, was sind sicherheitsrelevante Aktivitäten, Sicherheitsbereiche, Fallbeispiele Unfälle, Sicherheitshilfsmittel wie 3x3
+Blockziele:
+- Die TN können Aktivitäten im Sicherheitsbereich, sicherheitsrelevante Aktivitäten und \"normale\" Aktivitäten abgrenzen
+- Die TN kennen Hilfestellungen zum Schreiben eines Aktivitäten-SiKos
+
+Ausbildungsblock zu diesem Blocktitel und diesen Blockzielen:
+### Ausrichten:
+Beispiel-Situation: Schlitteltag. Die TN sollen so viele Gefahren wie möglich aufzählen, die an so einer Aktivität auftreten können. Wir schreiben die Gefahren auf Packpapier auf.
+### Reaktivieren:
+Wir stellen die TN sortiert nach Anzahl Knochen auf, die sie sich schon gebrochen haben. Dann nummerieren wir auf sechs.
+In diesen Gruppen tauschen wir uns aus:
+Wie können wir in der Pfadi mit solchen Gefahren umgehen? Wir schreiben in der Planungsphase ein Sicherheitskonzept (SiKo).
+Wer hat schon einmal ein SiKo für eine Aktivität geschrieben? Wer für ein ganzes Lager? Nach dem Basis müssen die TN ein SiKo für eine Aktivität schreiben können, aber für ein Lager muss man erst nach dem Aufbau können.
+Wie geht man vor, um ein SiKo zu schreiben? In den meisten Fällen schreibt man von früheren Aktivitäten oder Vorlagen ab, und passt es für aktuelle Situation an. Dafür hats in der Broschüre \"Sicherheit\" Vorlagen, von denen man abgucken kann.
+Wie ist ein SiKo aufgebaut? Sicherheitsvorkehrungen (präventiv) und Vorgehen im Notfall (reaktiv).
+Für welche Aktivitäten brauchts ein SiKo? Kurz Ideen sammeln und folgende ergänzen falls sie nicht genannt wurden: Seilaktivitäten, Pionierbauten, Velofahrten, anspruchsvolle Spiel- und Sportaktivitäten.
+Dann verteilen wir das J+S-Merkblatt Unfallprävention (das mit den grünen, orangen und roten Rechtecken für die drei Sicherheitsbereiche).
+### Informieren:
+Alle in der Gruppe lesen die erste, allgemeine Seite des Merkblatts. Für die restlichen drei Seiten teilen sie sich auf, so dass jeder Sicherheitsbereich von mindestens jemandem gelesen wird.
+### Verarbeiten:
+Konkrete Situationen werden geschildert und die TN müssen einordnen ob sie a) ohne SiKo möglich sind, b) ein SiKo nötig ist, c) das eine Aktivität im Sicherheitsbereich ist und ein Sicherheitsmodul braucht oder d) die Aktivität gar nicht erlaubt ist in Lagersport/Trekking.
+- Versteckis im Wald spielen. Lösung: a)
+- Wanderung im SoLa, ein Teil der Strecke ist T3 (nach der SAC-Wanderskala). Lösung: b) oder c), je nach Art und Länge der T3 Stelle
+- Hinter dem Lagerhaus in den Bergen ein Iglu bauen und darin übernachten. Lösung: b)
+- Bachwanderung. Lösung: b) oder c), je nach Schwierigkeit der Strecke.
+- Auf einer Wanderung ein kurzes Stück über einen Gletscher laufen. Lösung: d)
+- Mit 15 TN im SoLa in einem See baden gehen, 1 Leiter hat SLRG Brevet See. Lösung: b), aber max. 12 TN dürfen gleichzeitig ins Wasser.
+- Nach einer langen Wanderung die Füsse in einen Fluss halten. Lösung: b) und die Stelle sollte gut gewählt sein.
+- Fackelwanderung in der Nacht. Lösung: b), je nach Gelände und Länge vielleicht a)
+- Überlebensnacht der Pfadis in Kleingruppen ohne Leitende, 300 Meter vom Lagerplatz. Lösung: b), auf Wolfsstufe sind Aktivitäten ohne Leitende zwar verboten (PBS Lagerreglement), auf Pfadistufe aber möglich wenn instruierte Leitpfadis dabei sind und die Lagerleitung immer weiss wo die Gruppen sich befinden.
+- Mehrtägige Wanderung mit Übernachtung in SAC-Hütte, auf dem letzten Stück zur Hütte muss man sich an einem Seil festhalten. Lösung: c) weil Wanderstrecken die man nicht mit freien Händen gehen kann mindestens als T3 gelten.
+- Mit Pfadigruppe Riverraften gehen. Lösung: d)
+Falls noch Zeit ist, können die TN selber noch Situationen für die anderen erfinden. Also jemand der über den Sicherheitsbereich Berg gelesen hat, könnte Situationen erfinden, für die man ein Bergmodul braucht etc.
+### Abschliessen:
+Letzte Frage: Der Schlitteltag vom Anfang, mit einer Wölfligruppe. Lösung: b), also ein SiKo ist nötig.
+Nochmals SiKo-Vorlagen in Sicherheits-Broschüre erwähnen."
+    ],
 ];
 $example = $examples[$_GET['age_group']] ?? $examples['16-17_basis'];
+$motto = $_GET['motto'] ?? '';
+$example = $example[strlen($motto) > 0 ? 'with_motto' : 'without_motto'] ?? $example['without_motto'];
 if (is_array($example)) {
     if (count($example) == 1) $example = $example[0];
     $example = join("\n\nWeiteres Beispiel:\n", $example);
@@ -115,6 +157,7 @@ if (is_array($example)) {
 $title = $_GET['title'];
 $contents = $_GET['contents'];
 $goals = $_GET['goals'];
+$mottoMessage = strlen($motto) > 0 ? "Kurs-Einkleidung: ${motto}\n" : '';
 $messages = [
     ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. ${ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
 
@@ -141,7 +184,7 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 ${example}
 
 Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
-    ['role' => 'user', 'content' => "Blocktitel: ${title}\nAusbildungsinhalte: ${contents}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
+    ['role' => 'user', 'content' => "Blocktitel: ${title}\n${mottoMessage}Ausbildungsinhalte: ${contents}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
 ];
 
 $stream = $client->chat()->createStreamed([
@@ -162,6 +205,7 @@ $data = [
     'ageGroup' => $_GET['age_group'],
     'targetGroup' => $_GET['target_group'],
     'courseType' => $courseType,
+    'motto' => $motto,
     'contents' => $contents,
     'goals' => $goals,
     'uuid' => uniqid(),
@@ -191,7 +235,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, contents, goals, programme, cost) VALUES (?,?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, motto, contents, goals, programme, cost) VALUES (?,?,?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['contents'], $data['goals'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['goals'], $data['message'], $cost]);
 }
