@@ -43,6 +43,9 @@ docker run -i --rm -v "$(pwd)":/var/www/html:ro --network host php:8-apache
 
 Then, you can visit your local version of the site at [http://localhost](http://localhost).
 
+If you want to test or set up the database saving part of the tools, you will have to run a MySQL or MariaDB database locally and fill in the credentials in your .env files.
+Inside the database, execute the two SQL scripts samstag/db-setup.sql and kursblock/db-setup.sql. For now, due to the lack of a framework, we don't have a migration mechanism. So if something about these SQL script is changed upstream, you will have to apply these changes manually to your database.
+
 ## Self-hosting
 
 Self-hosting is almost the same as running locally. Create and fill .env files, and install the PHP dependencies. Then, simply upload everything to your hosting of choice. Even a shared PHP hosting will do. Make sure to use a PHP version >= 8.
