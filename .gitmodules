@@ -1,0 +1,4 @@
+[submodule "pfadinamen"]
+	path = pfadinamen
+	url = https://github.com/carlobeltrame/pfadinamen.git
+	branch = master

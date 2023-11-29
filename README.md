@@ -28,7 +28,16 @@ There are two LLM tricks at work here:
 
 ## Running locally
 
-First of all, for the samstag and kursblock tools, you will need an [API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key). Create a copy of samstag/.env.example called samstag/.env (and vice versa for kursblock) and fill in your API key in there.
+### pfadinamen.app
+If you want to run the pfadinamen.app tool locally, after checking out this repo you have to initialize the submodule:
+```bash
+git submodule init && git submodule update
+```
+
+Advanced: In case the pfadinamen.app repo has new commits, you can update the submodule reference using `git submodule update --remote`.
+
+### samstag and kursblock
+For the samstag and kursblock tools, you will need an [API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key). Create a copy of samstag/.env.example called samstag/.env (and vice versa for kursblock) and fill in your API key in there.
 
 **Note:** To have access to the GPT 4 API, currently you will need to have made a successful payment of [at least 1 USD](https://help.openai.com/en/articles/7102672-how-can-i-access-gpt-4) to OpenAI. If you don't have such an OpenAI account, you can change the model name in your .env files to `gpt-3.5-turbo-1106`, but you might face worse output quality with GPT 3.5 Turbo as opposed to GPT 4 Turbo.
 
@@ -38,16 +47,17 @@ Next, you will have to install the PHP dependencies:
 (cd kursblock && composer install)
 ```
 
-Finally, you can serve the website using any webserver which supports PHP. If you have docker installed, an easy way to do that is opening a terminal in the root of this repository and executing:
+If you want to test or set up the database saving part of the tools, you will have to run a MySQL or MariaDB database locally and fill in the credentials in your .env files.
+Inside the database, execute the two SQL scripts samstag/db-setup.sql and kursblock/db-setup.sql. For now, due to the lack of a framework, we don't have a migration mechanism. So if something about these SQL script is changed upstream, you will have to apply these changes manually to your database.
+
+### Final steps
+Once you have set up the tools you want, you can serve the website using any webserver which supports PHP. If you have docker installed, an easy way to do that is opening a terminal in the root of this repository and executing:
 ```bash
 docker run -i --rm -v "$(pwd)":/var/www/html:ro --network host php:8-apache
 ```
 
 Then, you can visit your local version of the site at [http://localhost](http://localhost).
 
-If you want to test or set up the database saving part of the tools, you will have to run a MySQL or MariaDB database locally and fill in the credentials in your .env files.
-Inside the database, execute the two SQL scripts samstag/db-setup.sql and kursblock/db-setup.sql. For now, due to the lack of a framework, we don't have a migration mechanism. So if something about these SQL script is changed upstream, you will have to apply these changes manually to your database.
-
 ## Self-hosting
 
-Self-hosting is almost the same as running locally. Create and fill .env files, and install the PHP dependencies. Then, simply upload everything to your hosting of choice. Even a shared PHP hosting will do. Make sure to use a PHP version >= 8.
+Self-hosting is almost the same as running locally. But instead of the final steps, simply upload everything to your hosting of choice. Even a shared PHP hosting will do. Make sure to use a PHP version >= 8.
