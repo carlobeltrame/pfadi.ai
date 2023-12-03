@@ -50,9 +50,9 @@ $targetGroup = $targetGroups[$_GET['target_group']] ?? $targetGroups['gemischt']
 $courseTypes = [
     '14-15_pio' => 'Piokurs',
     '15-16_futura' => 'Futurakurs',
-    '16-17_basis' => "Basiskurs ${targetGroup}",
-    '17-18_aufbau' => "Aufbaukurs ${targetGroup}",
-    '17-18_ef' => "Stufeneinführungskurs ${targetGroup}",
+    '16-17_basis' => "Basiskurs {$targetGroup}",
+    '17-18_aufbau' => "Aufbaukurs {$targetGroup}",
+    '17-18_ef' => "Stufeneinführungskurs {$targetGroup}",
     '19-24_panorama' => 'Panoramakurs',
     '21-27_top' => 'Topkurs',
 ];
@@ -70,9 +70,9 @@ $targetGroupDescription = $targetGroupDescriptions[$_GET['target_group']] ?? $ta
 $agesAndCourseGoals = [
     '14-15_pio' => 'Die Kursteilnehmenden sind zwischen 14 und 15 Jahren alt und werden dazu ausgebildet, eigene Projekte umzusetzen und in der Pfadi mehr Verantwortung zu übernehmen.',
     '15-16_futura' => 'Die Kurseilnehmenden sind zwischen 15 und 16 Jahren alt und werden dazu ausgebildet, einfache Pfadiaktivitäten zu planen und umzusetzen, sowie ihre Pfaditechnikkenntnisse zu verbessern.',
-    '16-17_basis' => "Die Kursteilnehmenden sind zwischen 16 und 17 Jahren alt und werden zu verantwortungsbewussten Mitleitenden in einem Lagerleitungsteam für ${targetGroupDescription} ausgebildet.",
-    '17-18_aufbau' => "Die Kursteilnehmenden sind zwischen 17 und 18 Jahren alt und werden zu Hauptlagerleitenden in Lagern für ${targetGroupDescription} ausgebildet.",
-    '17-18_ef' => "Die Kursteilnehmenden sind zwischen 17 und 18 Jahren alt, haben bereits eine Pfadileitungs-Ausbildung und werden im Kurs auf die spezifischen Bedürfnisse von ${targetGroupDescription} geschult.",
+    '16-17_basis' => "Die Kursteilnehmenden sind zwischen 16 und 17 Jahren alt und werden zu verantwortungsbewussten Mitleitenden in einem Lagerleitungsteam für {$targetGroupDescription} ausgebildet.",
+    '17-18_aufbau' => "Die Kursteilnehmenden sind zwischen 17 und 18 Jahren alt und werden zu Hauptlagerleitenden in Lagern für {$targetGroupDescription} ausgebildet.",
+    '17-18_ef' => "Die Kursteilnehmenden sind zwischen 17 und 18 Jahren alt, haben bereits eine Pfadileitungs-Ausbildung und werden im Kurs auf die spezifischen Bedürfnisse von {$targetGroupDescription} geschult.",
     '19-24_panorama' => 'Die Kursteilnehmenden sind zwischen 19 und 24 Jahren alt und ihre offene Betrachtungsweise sowie die Fähigkeit, kritisch zu reflektieren sollen gefördert werden.',
     '21-27_top' => 'Die Kursteilnehmenden sind zwischen 21 und 27 Jahren alt und werden dazu ausgebildet, Pfadi-Ausbildungskurse zu planen und durchzuführen, Ausbildungsblöcke didaktisch sinnvoll zu gestalten und fördernde Rückmeldegespräche zu führen.',
 ];
@@ -157,9 +157,9 @@ if (is_array($example)) {
 $title = $_GET['title'];
 $contents = $_GET['contents'];
 $goals = $_GET['goals'];
-$mottoMessage = strlen($motto) > 0 ? "Kurs-Einkleidung: ${motto}\n" : '';
+$mottoMessage = strlen($motto) > 0 ? "Kurs-Einkleidung: {$motto}\n" : '';
 $messages = [
-    ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. ${ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
+    ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. {$ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
 
 Übliche Abkürzungen und Begriffe:
 Sicherheitskonzept - SiKo
@@ -181,10 +181,10 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 5 (Pfadi-)Beziehungen - 5 Bereiche in denen die PBS ihre Mitglieder fördern will: Beziehung zur Persönlichkeit, zum eigenen Körper, zu den Mitmenschen, zur Umwelt und zur Spiritualität
 7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen
 
-${example}
+{$example}
 
 Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
-    ['role' => 'user', 'content' => "Blocktitel: ${title}\n${mottoMessage}Ausbildungsinhalte: ${contents}\nBlockziele:\n${goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
+    ['role' => 'user', 'content' => "Blocktitel: {$title}\n{$mottoMessage}Ausbildungsinhalte: {$contents}\nBlockziele:\n{$goals}\nAusbildungsblock zu diesem Blocktitel und diesen Blockzielen:\n"],
 ];
 
 $stream = $client->chat()->createStreamed([
