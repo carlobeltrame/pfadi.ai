@@ -244,6 +244,25 @@ footer {
     border-radius: 0 5px 5px 0;
 }
 
+.generator-collapse {
+    margin-bottom: 16px;
+    transition: max-height 0.5s ease-out;
+    max-height: 20rem;
+    overflow: hidden;
+}
+
+.generator-collapse:not([open]) {
+    max-height: 2.3rem;
+}
+
+.generator-collapse summary {
+    padding-bottom: 16px;
+}
+
+.generator-collapse-summary {
+    cursor: pointer;
+}
+
 .generator-submit-row {
     display: flex;
     flex-direction: row;
