@@ -214,7 +214,7 @@
     const targetGroupText = ['Basiskurs', 'Aufbaukurs', 'Stufeneinführungskurs'].includes(courseTypeText) ?
       ' ' + targetGroup.options[targetGroup.selectedIndex].text :
       ''
-    const mottoText = motto.value ? ' ' + motto.value : ''
+    const mottoText = motto.value ? ', ' + motto.value : ''
 
     courseTypeSummary.textContent = `${courseTypeText}${targetGroupText}${mottoText}`
   }
@@ -252,32 +252,34 @@
   <form id="goals_form" onsubmit="return requestGoals(event)">
     <details class="generator-collapse">
       <summary><span class="generator-collapse-heading">Einstellungen zum Kurs (<span id="course_type_summary"></span>)</span></summary>
-      <div class="generator-input-group">
-        <label for="age_group" class="generator-label">Alter der Kurs-TN</label>
-        <select id="age_group" class="generator-input" name="age_group" required onchange="updateCourseTypeSummary()">
-          <option value="14-15_pio">14 - 15 Jahre (Piokurs)</option>
-          <option value="15-16_futura">15 - 16 Jahre (Futurakurs)</option>
-          <option value="16-17_basis" selected="selected">16 - 17 Jahre (Basiskurs)</option>
-          <option value="17-18_aufbau">17 - 18 Jahre (Aufbaukurs)</option>
-          <option value="17-18_ef">17 - 18 Jahre (Stufeneinführungskurs)</option>
-          <option value="19-24_panorama">19 - 24 Jahre (Panoramakurs)</option>
-          <option value="21-27_top">21 - 27 Jahre (Topkurs)</option>
-        </select>
-      </div>
-      <div class="generator-input-group">
-        <label for="target_group" class="generator-label">Zielgruppe der Kurs-Anerkennung (falls relevant)</label>
-        <select id="target_group" class="generator-input" name="target_group" required onchange="updateCourseTypeSummary()">
-          <option value="biberstufe">Biberstufe</option>
-          <option value="wolfsstufe">Wolfsstufe</option>
-          <option value="pfadistufe" selected="selected">Pfadistufe</option>
-          <option value="gemischt" selected="selected">gemischt Wolfsstufe - Pfadistufe</option>
-          <option value="piostufe">Piostufe</option>
-        </select>
-      </div>
-      <div class="generator-input-group">
-        <label for="motto" class="generator-label">Kurs-Einkleidung (optional) <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=26" target="_blank">[was ist das?]</a></small></label>
-        <input type="text" id="motto" name="motto" class="generator-input" maxlength="256" onblur="updateCourseTypeSummary()">
-      </div>
+      <fieldset>
+        <div class="generator-input-group">
+          <label for="age_group" class="generator-label">Alter der Kurs-TN</label>
+          <select id="age_group" class="generator-input" name="age_group" required onchange="updateCourseTypeSummary()">
+            <option value="14-15_pio">14 - 15 Jahre (Piokurs)</option>
+            <option value="15-16_futura">15 - 16 Jahre (Futurakurs)</option>
+            <option value="16-17_basis" selected="selected">16 - 17 Jahre (Basiskurs)</option>
+            <option value="17-18_aufbau">17 - 18 Jahre (Aufbaukurs)</option>
+            <option value="17-18_ef">17 - 18 Jahre (Stufeneinführungskurs)</option>
+            <option value="19-24_panorama">19 - 24 Jahre (Panoramakurs)</option>
+            <option value="21-27_top">21 - 27 Jahre (Topkurs)</option>
+          </select>
+        </div>
+        <div class="generator-input-group">
+          <label for="target_group" class="generator-label">Zielgruppe der Kurs-Anerkennung (falls relevant)</label>
+          <select id="target_group" class="generator-input" name="target_group" required onchange="updateCourseTypeSummary()">
+            <option value="biberstufe">Biberstufe</option>
+            <option value="wolfsstufe">Wolfsstufe</option>
+            <option value="pfadistufe" selected="selected">Pfadistufe</option>
+            <option value="gemischt" selected="selected">gemischt Wolfsstufe - Pfadistufe</option>
+            <option value="piostufe">Piostufe</option>
+          </select>
+        </div>
+        <div class="generator-input-group">
+          <label for="motto" class="generator-label">Kurs-Einkleidung (optional) <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=26" target="_blank">[was ist das?]</a></small></label>
+          <input type="text" id="motto" name="motto" class="generator-input" maxlength="256" onblur="updateCourseTypeSummary()">
+        </div>
+      </fieldset>
     </details>
     <div class="generator-input-group">
       <label for="title" class="generator-label">Blocktitel</label>
