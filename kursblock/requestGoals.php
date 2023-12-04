@@ -80,34 +80,32 @@ $agesAndCourseGoals = [
 $ageAndCourseGoal = $agesAndCourseGoals[$_GET['age_group']] ?? $agesAndCourseGoals['16-17_basis'];
 
 $examples = [
-    '16-17_basis' => "Beispiel:
-Blocktitel: Einführung SiKo
+    '16-17_basis' => [
+        "Blocktitel: Einführung SiKo
 Ausbildungsinhalte: Sicherheitsrelevante Aktivitäten, Aktivitäten im Sicherheitsbereich, 3x3, SiKo-Vorlagen aus der Broschüre
 Blockziele:
 Die TN können für vorgegebene Aktivitäten unterscheiden, ob sie sicherheitsrelevant sind, ob sie im Sicherheitsbereich sind, ob sie nicht erlaubt sind oder ob sie kein SiKo benötigen.
 Die TN können für eine vorgegebene Aktivität (und Rekkbericht) die ersten zwei Zeilen des 3x3 ausfüllen.
 Die TN kennen die SiKo-Vorlagen aus der Sicherheitsbroschüre und können diese für eine konkrete Aktivität anpassen.
-Die TN können in eigenen Worten die Anforderungen bei einigen üblichen sicherheitsrelevanten Aktivitäten zusammenfassen.
-
-Weiteres Beispiel:
-Blocktitel: Stufengerechtigkeit und Bedürfnisse
+Die TN können in eigenen Worten die Anforderungen bei einigen üblichen sicherheitsrelevanten Aktivitäten zusammenfassen.",
+        "Blocktitel: Stufengerechtigkeit und Bedürfnisse
 Ausbildungsinhalte: Pfadistufengerechtigkeit, Aktivitäten für Pfadistufe anpassen
 Blockziele:
 - Die TN können Aktivitätsbeispiele nach Tauglichkeit für die Pfadistufe beurteilen
 - Die TN können Aktivitätsbeispiele für die Pfadistufe anpassen.",
-    '17-18_aufbau' => "Beispiel:
-Blocktitel: SiKo Theorie
+    ],
+    '17-18_aufbau' => [
+        "Blocktitel: SiKo Theorie
 Blockziele:
 - Die TN kennen die vier Bereiche, über die ein Lager-SiKo Auskunft geben soll: 1. Informationen zum Lager, 2. allgemeine Sicherheitsvorkehrungen, 3. Vorbereitung für das Handeln im Notfall, 4. Liste der sicherheitsrelevanten Aktivitäten
-- Die TN Können ein Lager-SiKo schreiben
-
-Weiteres Beispiel:
-Blocktitel: Betreuungsnetzwerk für Stufenleitungen
+- Die TN Können ein Lager-SiKo schreiben",
+    "Blocktitel: Betreuungsnetzwerk für Stufenleitungen
 Ausbildungsinhalte: Betreuungsnetzwerk, Funktion der Stufenleitung
 Blockziele:
 - Die TN können ihre Funktion und Aufgaben als Stufenleitung beschreiben.
 - Die TN können angeben, an welche Instanz im Betreuungsnetzwerk sie sich wenden können.
 - Die TN tauschen sich über die verschieden Abteilungsorganisationen aus.",
+    ],
 ];
 $example = $examples[$_GET['age_group']] ?? $examples['16-17_basis'];
 if (is_array($example)) {
@@ -141,6 +139,7 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 5 (Pfadi-)Beziehungen - 5 Bereiche in denen die PBS ihre Mitglieder fördern will: Beziehung zur Persönlichkeit, zum eigenen Körper, zu den Mitmenschen, zur Umwelt und zur Spiritualität
 7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen
 
+Beispiel:
 {$example}
 
 Schreibe nun Blockziele zum folgenden Ausbildungsblock. Gib ausschliesslich die Blockziele als Aufzählung aus, wie im Beispiel oben." ],
