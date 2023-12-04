@@ -5,6 +5,7 @@ CREATE TABLE `kursblock_goals` (
                                    `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `motto` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `contents` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                   `literature` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `goals` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `cost` float NOT NULL,
                                    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -17,6 +18,7 @@ CREATE TABLE `kursblock_programme` (
                                      `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `motto` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `contents` varchar(2048) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                     `literature` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `goals` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `programme` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `cost` float NOT NULL,

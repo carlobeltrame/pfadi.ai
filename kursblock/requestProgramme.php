@@ -101,8 +101,8 @@ Wie unterscheiden sich die Kinder in der Pfadistufe von euch (Roverstufe)?
 Die TN-Gruppen bekommen dazu je ein Whiteboard mit einem vorbereiteten Placemat (Rechteck in der Mitte, mit Ecken die zu den Whiteboard-Ecken verbunden sind). Die TN sitzen um das Whiteboard herum und schreiben zuerst ihre Ideen einzeln in die Felder am Rand. Dann tragen sie in der Mitte das Wichtigste zusammen.
 Wenn alle TN-Gruppen ein Resultat haben, stellen sie es sich gegenseitig im Plenum vor.
 ### Informieren:
-Jede der fünf Gruppen von vorher bekommt einen von 5 Abschnitten aus dem Pfadiprofil über die Eigenschaften der Kinder in der Pfadistufe. Sie sollen diesen Abschnitt durchlesen, und wichtige Punkte markieren oder aufschreiben.
-Dann machen wir 4 neue Expertengruppen (anhand der Kartenfarbe neu zusammensetzen). Die TN sollen sich ihre gelesenen Abschnitte vorstellen, und haben den Auftrag, einen Spickzettel (Zauberformel) zusammenzustellen, wie man gutes Programm für die Pfadistufe erkennt.
+Jede der fünf Gruppen von vorher bekommt einen von 5 Abschnitten aus dem [Pfadiprofil S. 27-28] über die Eigenschaften der Kinder in der Pfadistufe. Sie sollen diesen Abschnitt durchlesen, und wichtige Punkte markieren oder aufschreiben.
+Dann machen wir 4 neue Expert*innengruppen (anhand der Kartenfarbe neu zusammensetzen). Die TN sollen sich ihre gelesenen Abschnitte vorstellen, und haben den Auftrag, einen Spickzettel (Zauberformel) zusammenzustellen, wie man gutes Programm für die Pfadistufe erkennt.
 ### Verarbeiten:
 Je zwei der vier Gruppen gehen zusammen in einen Raum. Die TN der einen Gruppe bekommen ein Aktivitätsbeispiel von der Kursleitung vorgegeben, und spielen dieses in einem Rollenspiel vor. Die TN der anderen Gruppe schauen zu, beurteilen mithilfe ihrer Zauberformel, ob diese Aktivität pfadistufengerecht ist, und machen Verbesserungsvorschläge, wie die Aktivität angepasst werden könnte.
 ### Abschliessen:
@@ -124,9 +124,9 @@ Wer hat schon einmal ein SiKo für eine Aktivität geschrieben? Wer für ein gan
 Wie geht man vor, um ein SiKo zu schreiben? In den meisten Fällen schreibt man von früheren Aktivitäten oder Vorlagen ab, und passt es für aktuelle Situation an. Dafür hats in der Broschüre \"Sicherheit\" Vorlagen, von denen man abgucken kann.
 Wie ist ein SiKo aufgebaut? Sicherheitsvorkehrungen (präventiv) und Vorgehen im Notfall (reaktiv).
 Für welche Aktivitäten brauchts ein SiKo? Kurz Ideen sammeln und folgende ergänzen falls sie nicht genannt wurden: Seilaktivitäten, Pionierbauten, Velofahrten, anspruchsvolle Spiel- und Sportaktivitäten.
-Dann verteilen wir das J+S-Merkblatt Unfallprävention (das mit den grünen, orangen und roten Rechtecken für die drei Sicherheitsbereiche).
+Dann verteilen wir das J+S-Merkblatt Unfallprävention.
 ### Informieren:
-Alle in der Gruppe lesen die erste, allgemeine Seite des Merkblatts. Für die restlichen drei Seiten teilen sie sich auf, so dass jeder Sicherheitsbereich von mindestens jemandem gelesen wird.
+Alle in der Gruppe lesen die erste, allgemeine Seite des Merkblatts [Unfallprävention und Sicherheitsanforderungen S. 1]. Für die restlichen drei Seiten [Unfallprävention und Sicherheitsanforderungen S. 2-4] teilen sie sich auf, so dass jeder Sicherheitsbereich von mindestens jemandem gelesen wird.
 ### Verarbeiten:
 Konkrete Situationen werden geschildert und die TN müssen einordnen ob sie a) ohne SiKo möglich sind, b) ein SiKo nötig ist, c) das eine Aktivität im Sicherheitsbereich ist und ein Sicherheitsmodul braucht oder d) die Aktivität gar nicht erlaubt ist in Lagersport/Trekking.
 - Versteckis im Wald spielen. Lösung: a)
@@ -142,8 +142,8 @@ Konkrete Situationen werden geschildert und die TN müssen einordnen ob sie a) o
 - Mit Pfadigruppe Riverraften gehen. Lösung: d)
 Falls noch Zeit ist, können die TN selber noch Situationen für die anderen erfinden. Also jemand der über den Sicherheitsbereich Berg gelesen hat, könnte Situationen erfinden, für die man ein Bergmodul braucht etc.
 ### Abschliessen:
-Letzte Frage: Der Schlitteltag vom Anfang, mit einer Wölfligruppe. Lösung: b), also ein SiKo ist nötig.
-Nochmals SiKo-Vorlagen in Sicherheits-Broschüre erwähnen."
+Wir kommen abschliessend wieder zurück zur Einstiegsfrage: Der Schlitteltag vom Anfang, mit einer Wölfligruppe. Lösung: b), also ein SiKo ist nötig.
+Wir erwähnen nochmals die SiKo-Vorlagen in der Broschüre [Sicherheit S. 34-38]."
     ],
 ];
 $example = $examples[$_GET['age_group']] ?? $examples['16-17_basis'];
@@ -156,12 +156,11 @@ if (is_array($example)) {
 
 $title = $_GET['title'];
 $contents = $_GET['contents'];
+$literature = $_GET['literature'];
 $goals = $_GET['goals'];
 $mottoMessage = strlen($motto) > 0 ? "Kurs-Einkleidung: {$motto}\n" : '';
-$messages = [
-    ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. {$ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
 
-Übliche Abkürzungen und Begriffe:
+$literatureMessage = [ 'role' => 'system', 'content' => "Du bist Ausbildungs-Expert*in in der Pfadi. Übliche Abkürzungen und Begriffe:
 Sicherheitskonzept - SiKo
 Teilnehmende - TN
 Pfadibewegung Schweiz - PBS
@@ -179,7 +178,19 @@ Stufenmodell - teilt die Pfadibewegung in fünf Altersstufen ein, was im Pfadipr
 Pfadigrundlagen - die allgemeinen pädagogischen Grundlagen der PBS. Beschreiben, wie die ganzheitliche Förderung der Mitglieder der Pfadi erreicht wird: Mit Aktivitäten abgeleitet aus den sieben Pfadimethoden werden die Ziele einer Stufe zu den fünf Pfadibeziehungen gefördert
 Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie die Ziele und Arbeitsweise der jeweiligen Stufe (aufgrund des jeweiligen Entwicklungsstandes der Kinder/Jugendlichen)
 5 (Pfadi-)Beziehungen - 5 Bereiche in denen die PBS ihre Mitglieder fördern will: Beziehung zur Persönlichkeit, zum eigenen Körper, zu den Mitmenschen, zur Umwelt und zur Spiritualität
-7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen
+7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen" ];
+if ($literature) {
+    $literatureMessage = [
+        'role' => 'system',
+        'content' => "Du bist Ausbildungs-Expert*in in der Pfadi. Du basierst deine Ausbildungsblöcke (Lektionen) wenn immer möglich auf der Pfadi-Literatur. Insbesondere im Informieren-Teil des ARIVA-Blockaufbaus sollen sich die Teilnehmenden die Literatur erarbeiten. Um Literatur zu referenzieren, verwendest du Zitate mit eckigen Klammern wie z.B. [Pfadiprofil S. 9-10] wobei Pfadiprofil hier ein Beispiel für den Namen einer Ausbildungsbroschüre ist.
+Für deine nächste Aufgabe verwendest du primär das Wissen aus folgenden Ausschnitten aus der Pfadi-Literatur:
+
+{$literature}"
+    ];
+}
+$messages = [
+    $literatureMessage,
+    ['role' => 'system', 'content' => "Schreibe einen Ausbildungsblock (Lektion) für einen Pfadi-Ausbildungskurs. {$ageAndCourseGoal} Vorgegeben sind der Titel des Ausbildungsblocks, sowie die Blockziele (Lernziele) für den Ausbildungsblock. Verwende einen ARIVA-Aufbau (Ausrichten, Reaktivieren, Informieren, Verarbeiten, Abschliessen).
 
 {$example}
 
@@ -207,6 +218,7 @@ $data = [
     'courseType' => $courseType,
     'motto' => $motto,
     'contents' => $contents,
+    'literature' => $literature,
     'goals' => $goals,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
@@ -235,7 +247,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, motto, contents, goals, programme, cost) VALUES (?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_programme (title, age_group, target_group, motto, contents, literature, goals, programme, cost) VALUES (?,?,?,?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['goals'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['literature'], $data['goals'], $data['message'], $cost]);
 }

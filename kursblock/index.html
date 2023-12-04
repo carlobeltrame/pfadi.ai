@@ -13,6 +13,7 @@
       document.querySelector('#target_group'),
       document.querySelector('#motto'),
       document.querySelector('#contents'),
+      document.querySelector('#literature'),
       document.querySelector('#goals_submit'),
       document.querySelector('#goals'),
       document.querySelector('#programme_submit'),
@@ -69,6 +70,7 @@
     const targetGroup = document.querySelector('#target_group')
     const motto = document.querySelector('#motto')
     const contents = document.querySelector('#contents')
+    const literature = document.querySelector('#literature')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
     const programmeHistorySelect = document.querySelector('#programme_history_select')
@@ -77,6 +79,7 @@
     targetGroup.value = data.targetGroup.toLowerCase()
     motto.value = data.motto || ''
     contents.value = data.contents || ''
+    literature.value = data.literature || ''
     goals.value = data.message
     programme.value = ''
     programmeHistorySelect.value = '0'
@@ -150,6 +153,7 @@
     const targetGroup = document.querySelector('#target_group')
     const motto = document.querySelector('#motto')
     const contents = document.querySelector('#contents')
+    const literature = document.querySelector('#literature')
     const goals = document.querySelector('#goals')
     const programme = document.querySelector('#programme')
     const goalsHistorySelect = document.querySelector('#goals_history_select')
@@ -158,6 +162,7 @@
     targetGroup.value = data.targetGroup.toLowerCase()
     motto.value = data.motto || ''
     contents.value = data.contents || ''
+    literature.value = data.literature || ''
     goals.value = data.goals
     programme.value = data.message
     goalsHistorySelect.value = '0'
@@ -288,6 +293,17 @@
     <div class="generator-input-group">
       <label for="contents" class="generator-label">Ausbildungsinhalte <small><a href="https://pfadi.swiss/media/files/51/1_ausbildungskurse_de_rz_low_23.pdf#page=29" target="_blank">[was ist das?]</a></small></label>
       <input type="text" id="contents" name="contents" class="generator-input" required maxlength="256">
+    </div>
+    <div class="generator-input-group">
+      <label for="literature" class="generator-label">Literatur-Ausschnitte (optional)</label>
+      <textarea id="literature" name="literature" class="generator-input" rows="10" placeholder="[Pfadiprofil S. 45]
+## Kapitelname
+Text aus der Broschüre der im Block verwendet und referenziert werden soll...
+
+[Pfadistufe S. 1]
+### Anderer Kapitelname
+Weiterer Text aus weiterer Broschüre...
+etc."></textarea>
     </div>
     <div class="generator-submit-row">
       <button id="goals_submit" type="submit" class="generator-submit">Blockziele generieren und 3 Rappen von Cosinus verbrauchen</button>

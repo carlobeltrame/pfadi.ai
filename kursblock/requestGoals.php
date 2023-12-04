@@ -116,10 +116,9 @@ if (is_array($example)) {
 $title = $_GET['title'];
 $motto = $_GET['motto'];
 $contents = $_GET['contents'];
-$messages = [
-    ['role' => 'system', 'content' => "Schreibe Blockziele (Lernziele) für einen Ausbildungsblock (Lektion) in einem Pfadi-Ausbildungskurs. {$ageAndCourseGoal}
+$literature = $_GET['literature'];
 
-Übliche Abkürzungen und Begriffe:
+$literatureMessage = [ 'role' => 'system', 'content' => "Du bist Ausbildungs-Expert*in in der Pfadi. Übliche Abkürzungen und Begriffe:
 Sicherheitskonzept - SiKo
 Teilnehmende - TN
 Pfadibewegung Schweiz - PBS
@@ -137,7 +136,20 @@ Stufenmodell - teilt die Pfadibewegung in fünf Altersstufen ein, was im Pfadipr
 Pfadigrundlagen - die allgemeinen pädagogischen Grundlagen der PBS. Beschreiben, wie die ganzheitliche Förderung der Mitglieder der Pfadi erreicht wird: Mit Aktivitäten abgeleitet aus den sieben Pfadimethoden werden die Ziele einer Stufe zu den fünf Pfadibeziehungen gefördert
 Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie die Ziele und Arbeitsweise der jeweiligen Stufe (aufgrund des jeweiligen Entwicklungsstandes der Kinder/Jugendlichen)
 5 (Pfadi-)Beziehungen - 5 Bereiche in denen die PBS ihre Mitglieder fördern will: Beziehung zur Persönlichkeit, zum eigenen Körper, zu den Mitmenschen, zur Umwelt und zur Spiritualität
-7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen
+7 (Pfadi-)Methoden - 7 Kategorien von Pfadiaktivitäten: Persönlichen Fortschritt fördern, Gesetz und Versprechen, Leben in der Gruppe, Rituale und Traditionen, Mitbestimmen & Verantwortung tragen, Draussen leben, Spielen" ];
+if ($literature) {
+    $literatureMessage = [
+        'role' => 'system',
+        'content' => "Du bist Ausbildungs-Expert*in in der Pfadi. In deinen Ausbildungsblöcken (Lektionen) arbeitest du wenn immer möglich mit der Pfadi-Literatur.
+Für deine nächste Aufgabe verwendest du primär das Wissen aus folgenden Ausschnitten aus der Pfadi-Literatur:
+
+{$literature}"
+    ];
+}
+
+$messages = [
+    $literatureMessage,
+    ['role' => 'system', 'content' => "Schreibe Blockziele (Lernziele) für einen Ausbildungsblock (Lektion) in einem Pfadi-Ausbildungskurs. {$ageAndCourseGoal}
 
 Beispiel:
 {$example}
@@ -166,6 +178,7 @@ $data = [
     'courseType' => $courseType,
     'motto' => $motto,
     'contents' => $contents,
+    'literature' => $literature,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
 ];
@@ -193,7 +206,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, motto, contents, goals, cost) VALUES (?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO kursblock_goals (title, age_group, target_group, motto, contents, literature, goals, cost) VALUES (?,?,?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['ageGroup'], $data['targetGroup'], $data['motto'], $data['contents'], $data['literature'], $data['message'], $cost]);
 }
