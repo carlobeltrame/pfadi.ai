@@ -142,7 +142,7 @@ Stufenprofil - erklärt für jede Stufe die Umsetzung der Pfadigrundlagen, sowie
 Beispiel:
 {$example}
 
-Schreibe nun Blockziele zum folgenden Ausbildungsblock. Gib ausschliesslich die Blockziele als Aufzählung aus, wie im Beispiel oben." ],
+Schreibe nun maximal 5 Blockziele zum folgenden Ausbildungsblock. Gib ausschliesslich die Blockziele als Aufzählung aus, wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Blocktitel: {$title}\nAusbildungsinhalte: {$contents}\nBlockziele:\n"],
 ];
 
