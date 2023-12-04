@@ -7,9 +7,8 @@ error_reporting(E_ALL);
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$yourApiKey = $_ENV['OPENAI_API_KEY'];
 $client = OpenAI::factory()
-    ->withApiKey($yourApiKey)
+    ->withApiKey($_ENV['OPENAI_API_KEY'])
     ->withHttpClient(new \GuzzleHttp\Client(['timeout' => 120, 'connect_timeout' => 120]))
     ->make();
 
