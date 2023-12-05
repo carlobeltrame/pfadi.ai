@@ -261,7 +261,7 @@ fieldset {
 .generator-collapse {
     margin-bottom: 16px;
     transition: max-height 0.5s ease-out;
-    max-height: 25rem;
+    max-height: 26rem;
     overflow: hidden;
 }
 
@@ -323,7 +323,6 @@ fieldset {
 
 .post-it {
     font-family: 'Permanent Marker';
-    min-height: 150px;
     position:relative;
     background:#ffa;
     overflow:hidden;
