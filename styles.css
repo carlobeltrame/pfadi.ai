@@ -42,6 +42,15 @@
     font-weight: 700;
     src: url('./fonts/fredoka-v14-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
+/* permanent-marker-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Permanent Marker';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/permanent-marker-v16-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
 
 
 /* Reset some default styles for consistency */
@@ -313,6 +322,7 @@ fieldset {
 }
 
 .post-it {
+    font-family: 'Permanent Marker';
     min-height: 150px;
     position:relative;
     background:#ffa;
