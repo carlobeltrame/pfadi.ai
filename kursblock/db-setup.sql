@@ -8,7 +8,8 @@ CREATE TABLE `kursblock_goals` (
                                    `literature` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `goals` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `cost` float NOT NULL,
-                                   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `kursblock_programme` (
@@ -22,5 +23,6 @@ CREATE TABLE `kursblock_programme` (
                                      `goals` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `programme` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `cost` float NOT NULL,
-                                     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

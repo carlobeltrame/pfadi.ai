@@ -4,7 +4,8 @@ CREATE TABLE `samstag_stories` (
                                    `target_group` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `story` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                    `cost` float NOT NULL,
-                                   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `samstag_programme` (
@@ -14,7 +15,8 @@ CREATE TABLE `samstag_programme` (
                                      `story` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `programme` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                      `cost` float NOT NULL,
-                                     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `samstag_material` (
@@ -25,5 +27,6 @@ CREATE TABLE `samstag_material` (
                                     `programme` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                     `material` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                     `cost` float NOT NULL,
-                                    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
