@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  node:
+    image: node:18
+    user: node
+    working_dir: /home/node/app
+    volumes:
+      - ./:/home/node/app
+    command: yarn start

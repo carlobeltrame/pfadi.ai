@@ -352,6 +352,43 @@ fieldset {
     transform:skewX(25deg);
 }
 
+.post-it a {
+    border-radius: 0.8em 0.3em;
+    background: transparent;
+    text-decoration: none;
+    padding: 0 0.4rem 0 0.2rem;
+}
+
+.post-it a:hover, .post-it a:focus {
+    background: linear-gradient(
+            104deg,
+            rgba(130, 255, 173,0) 0.9%,
+            rgba(130, 255, 173,2.5) 2.4%,
+            rgba(130, 255, 173,1) 5.8%,
+            rgba(130, 255, 173,0.2) 93%,
+            rgba(130, 255, 173,1.4) 96%,
+            rgba(130, 255, 1732,0) 98%
+        ),
+        linear-gradient(183deg,
+            rgba(130, 255, 173,0) 0%,
+            rgba(130, 255, 173,0.3) 7.9%,
+            rgba(130, 255, 173,0) 15%
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.column-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+@media(max-width: 810px) {
+    .column-grid {
+        grid-template-columns:1fr;
+    }
+}
+
 .lds-dual-ring {
     width: 40px;
     height: 40px;

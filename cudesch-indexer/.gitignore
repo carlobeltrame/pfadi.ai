@@ -1,0 +1,4 @@
+.env
+documents/*.pdf
+/node_modules
+/supabase/.temp
