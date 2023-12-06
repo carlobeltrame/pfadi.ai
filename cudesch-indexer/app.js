@@ -16,6 +16,7 @@ const PFADI = 'Pfadi - das sind wir'
 const PROGRAMM = 'Programm - Pfadi leben'
 const SICHERHEIT = 'Sicherheit - Verantwortung tragen'
 const RQF = 'Rückmelden, Qualifizieren und Fördern im Ausbildungskurs'
+const PFADITECHNIK = 'Pfaditechnik in Wort und Bild'
 
 const supabaseApiKey = process.env.SUPABASE_API_KEY
 if (!supabaseApiKey) throw new Error(`Expected env var SUPABASE_API_KEY`)
@@ -52,6 +53,20 @@ const pbsEducationTextTransformer = (h1Regexp = /^\d /, h2Regexp = /^\d\.\d /, h
   if (item.str.match(h3Regexp)) return { ...item, str: '### ' + cleanedStr }
   if (item.str.match(h2Regexp)) return { ...item, str: '## ' + cleanedStr }
   if (item.str.match(h1Regexp)) return { ...item, str: '# ' + cleanedStr }
+  return { ...item, str: cleanedStr }
+}
+const matchesRule = (item, rule) => {
+  if ('regexp' in rule && !item.str.match(rule.regexp)) return false
+  if ('fontSize' in rule && item.transform[0] !== rule.fontSize) return false
+  if ('fontName' in rule && item.fontName !== rule.fontName) return false
+  if ('leftLessThan' in rule && item.transform[4] >= rule.leftLessThan) return false
+  return true
+}
+const flexibleTransformer = (h1Rule, h2Rule, h3Rule) => (item) => {
+  const cleanedStr = item.str.replaceAll(/\s+(?=\s)/g, '')
+  if (matchesRule(item, h1Rule)) return { ...item, str: '# ' + cleanedStr }
+  if (matchesRule(item, h2Rule)) return { ...item, str: '## ' + cleanedStr }
+  if (matchesRule(item, h3Rule)) return { ...item, str: '### ' + cleanedStr }
   return { ...item, str: cleanedStr }
 }
 
@@ -127,6 +142,23 @@ const loaders = [
     textItemTransformer: pbsEducationTextTransformer(),
     skip: 6,
     skipEnd: 5,
+    enabled: true,
+  }),
+  new CudeschPDFLoader('documents/pfaditechnik.pdf', {
+    source: 'https://www.hajk.ch/de/pfaditechnik-in-wort-und-bild-pfadi-glockenhof',
+    documentName: PFADITECHNIK,
+    textItemFilter: (item) => {
+      if ([83, 112, 144, 145, 146, 147, 148, 149, 169, 170, 171].includes(item.page)) return false
+      if (item.transform[0] <= 8) return false
+      return pbsTextFilter(50, 475, 800, 45)(item)
+    },
+    textItemTransformer: flexibleTransformer(
+      { fontSize: 16 },
+      { regexp: /^\d\.\b/, leftLessThan: 60 },
+      { regexp: /^\d\.\d\.\b/, leftLessThan: 60 }
+    ),
+    skip: 10,
+    skipEnd: 7,
     enabled: true,
   }),
 ]
