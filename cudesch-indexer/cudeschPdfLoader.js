@@ -51,20 +51,21 @@ export class CudeschPDFLoader extends PDFLoader {
     let chapterStartPageNumber = 1 + this.skip
     let nonHeaderLineFound = false
 
-    const completeChapter = (previousPageNumber, currentPageNumber, chapterNumber) => {
+    const completeChapter = (previousPageNumber, currentPageNumber, chapterNumber, hierarchy) => {
       if (!nonHeaderLineFound) return
       if (chapterItems.length > 1) {
         documents.push(new Document({
           pageContent: chapterItems.map((item) => item.str).join('\n'),
           metadata: {
-            ...metadata,
-            totalPages: pdf.numPages,
             documentName: this.documentName,
-            source: this.source,
+            hierarchy,
             pageNumber: chapterStartPageNumber,
             endPageNumber: previousPageNumber,
             chapterNumber: chapterNumber,
             sequenceNumber: 0,
+            totalPages: pdf.numPages,
+            ...metadata,
+            source: this.source,
           }
         }))
       }
@@ -73,8 +74,17 @@ export class CudeschPDFLoader extends PDFLoader {
       nonHeaderLineFound = false
     }
 
+    const headingLevel = (str) => {
+      let level
+      for (level = 0; level < str.length; level++) {
+        if (str.charAt(level) !== '#') break;
+      }
+      return level
+    }
+
     let chapterNumber = 0
     let previousPageNumber = 1 + this.skip
+    let hierarchy = []
     for (let i = 1 + this.skip; i <= pdf.numPages - this.skipEnd; i += 1) {
       const page = await pdf.getPage(i)
       const content = await page.getTextContent()
@@ -92,7 +102,10 @@ export class CudeschPDFLoader extends PDFLoader {
       this.pageBreaks.push({ page: i, startText: items[0].str.trim() })
       items.forEach((item) => {
         if (item.str.match(/^#+ /)) {
-          completeChapter(previousPageNumber, i, chapterNumber++)
+          completeChapter(previousPageNumber, i, chapterNumber++, hierarchy)
+          const level = headingLevel(item.str)
+          hierarchy = hierarchy.slice(0, Math.max(level - 1, 0))
+          hierarchy.push(item.str)
         } else {
           nonHeaderLineFound = true
         }
@@ -103,7 +116,8 @@ export class CudeschPDFLoader extends PDFLoader {
     completeChapter(
       pdf.numPages - this.skipEnd,
       pdf.numPages - this.skipEnd + 1,
-      chapterNumber++
+      chapterNumber++,
+      hierarchy
     )
 
     return documents
