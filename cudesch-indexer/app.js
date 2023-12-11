@@ -54,6 +54,10 @@ const matchesRule = (item, previousItem, rule) => {
   if (rule.fontSizeLessThan && item.transform[0] >= rule.fontSizeLessThan) return false
   if (rule.page && ![rule.page].flat().includes(item.page)) return false
   if (rule.pageNot && [rule.pageNot].flat().includes(item.page)) return false
+  if (rule.pageGreaterOrEq && item.page < rule.pageGreaterOrEq) return false
+  if (rule.pageLessOrEq && item.page > rule.pageLessOrEq) return false
+  if (rule.color && JSON.stringify(rule.color) !== JSON.stringify(item.color)) return false
+  if (rule.colorNot && JSON.stringify(rule.colorNot) === JSON.stringify(item.color)) return false
   if (rule.startOfLine &&
     item.page === previousItem.page &&
     item.transform[5] === previousItem.transform[5] &&
@@ -240,8 +244,13 @@ const loaders = [
     }),
     textItemTransformer: detectHeadings(
       { fontSize: 16 },
-      { regexp: /^\d\.(\D|$)/, xLessThan: 60 },
-      //{ regexp: /^\d\s?\.\d\.?(\D|$)/, xLessThan: 60 },
+      { regexp: /^\d\.(\D|$)/, xLessThan: 60, colorNot: [ 207, 49, 50 ] },
+      { anyOf: [
+          { regexp: /^\d\s?\.(\d+\.?)?(\D|$)/, xLessThan: 60, color: [ 207, 49, 50 ] },
+          // In this section of the book, there are lots of small bold headings which aren't formatted
+          // like the other numbered h3 headings
+          { pageGreaterOrEq: 179, pageLessOrEq: 201, startOfLine: true, fontName: 'g_d0_f2' },
+      ] },
     ),
     skip: 10,
     skipEnd: 7,
