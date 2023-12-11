@@ -48,77 +48,89 @@ export class CudeschPDFLoader extends PDFLoader {
     }).promise
     const documents = []
     let chapterItems = []
-    let chapterStartPageNumber = 1 + this.skip
+    let chapterNumber = 0
     let nonHeaderLineFound = false
 
-    const completeChapter = (previousPageNumber, currentPageNumber, chapterNumber, hierarchy) => {
-      if (!nonHeaderLineFound) return
+    const completeChapter = (hierarchy) => {
+      if (!nonHeaderLineFound) {
+        chapterItems.pop()
+        return
+      }
       if (chapterItems.length > 1) {
         documents.push(new Document({
           pageContent: chapterItems.map((item) => item.str).join('\n'),
           metadata: {
+            ...metadata,
             documentName: this.documentName,
             hierarchy,
-            pageNumber: chapterStartPageNumber,
-            endPageNumber: previousPageNumber,
-            chapterNumber: chapterNumber,
+            pageNumber: chapterItems[0].page,
+            endPageNumber: chapterItems[chapterItems.length - 1].page,
+            chapterNumber: chapterNumber++,
             sequenceNumber: 0,
             totalPages: pdf.numPages,
-            ...metadata,
             source: this.source,
           }
         }))
       }
       chapterItems = []
-      chapterStartPageNumber = currentPageNumber
       nonHeaderLineFound = false
     }
 
-    const headingLevel = (str) => {
-      let level
-      for (level = 0; level < str.length; level++) {
-        if (str.charAt(level) !== '#') break;
-      }
-      return level
-    }
-
-    let chapterNumber = 0
-    let previousPageNumber = 1 + this.skip
+    let previousItem = null
+    let previousFilterItem = null
+    let previousTransformerItem = null
     let hierarchy = []
     for (let i = 1 + this.skip; i <= pdf.numPages - this.skipEnd; i += 1) {
       const page = await pdf.getPage(i)
       const content = await page.getTextContent()
+
+      if (content.items.length === 0) continue
+      if (!previousFilterItem) previousFilterItem = content.items[0]
+      if (!previousTransformerItem) previousTransformerItem = content.items[0]
+
       const items = content.items
-        .map(item => ({ ...item, page: i, odd: i % 2 }))
+        .map(item => ({ ...item, page: i, odd: !!(i % 2) }))
         .sort((a, b) => {
           if (a.transform[5] !== b.transform[5]) return b.transform[5] - a.transform[5]
           return a.transform[4] - b.transform[4]
         })
-        .filter(this.textItemFilter)
-        .map(this.textItemTransformer)
-      if (items.length === 0) {
-        continue
-      }
+        .filter((item) => {
+          const result = this.textItemFilter(item, previousFilterItem)
+          if (result) previousFilterItem = item
+          return result
+        })
+        .map((item) => {
+          const result = this.textItemTransformer(item, previousTransformerItem)
+          previousTransformerItem = result
+          return result
+        })
+        .reduce((items, item) => {
+          if (item.joinWithPrevious && items.length > 0) {
+            // Join and remove multiple consecutive whitespaces
+            items[items.length - 1].str = (items[items.length - 1].str + ' ' + item.str).replaceAll(/\s+(?=\s)/g, '')
+          } else {
+            items.push(item)
+          }
+          return items
+        }, [])
+
+      if (items.length === 0) continue
+      if (!previousItem) previousItem = items[0]
       this.pageBreaks.push({ page: i, startText: items[0].str.trim() })
       items.forEach((item) => {
-        if (item.str.match(/^#+ /)) {
-          completeChapter(previousPageNumber, i, chapterNumber++, hierarchy)
-          const level = headingLevel(item.str)
+        if (item.heading) {
+          completeChapter(hierarchy)
+          const level = item.heading
           hierarchy = hierarchy.slice(0, Math.max(level - 1, 0))
           hierarchy.push(item.str)
         } else {
           nonHeaderLineFound = true
         }
-        previousPageNumber = i
         chapterItems.push(item)
+        previousItem = item
       })
     }
-    completeChapter(
-      pdf.numPages - this.skipEnd,
-      pdf.numPages - this.skipEnd + 1,
-      chapterNumber++,
-      hierarchy
-    )
+    completeChapter(hierarchy)
 
     return documents
   }
