@@ -276,12 +276,13 @@ export class CudeschPDFLoader extends PDFLoader {
 class Table {
   constructor (descriptor) {
     this.page = descriptor.page
-    this.numRows = descriptor.numRows || (descriptor.rowBounds ? descriptor.rowBounds.length - 1 : 1)
+    this.numRows = descriptor.numRows || (descriptor.rowHeights ? descriptor.rowHeights.length : (descriptor.rowBounds ? descriptor.rowBounds.length - 1 : 1))
     this.numCols = descriptor.numCols || (descriptor.colBounds ? descriptor.colBounds.length - 1 : 1)
     this.top = descriptor.top || (descriptor.rowBounds ? descriptor.rowBounds[0] || 3000 : 3000)
     this.bottom = descriptor.bottom || (descriptor.rowBounds ? descriptor.rowBounds[descriptor.rowBounds.length - 1] || 0 : 0)
     this.left = descriptor.left || (descriptor.colBounds ? descriptor.colBounds[0] || 0 : 0)
     this.right = descriptor.right || (descriptor.colBounds ? descriptor.colBounds[descriptor.colBounds.length - 1] || 3000 : 3000)
+    this.rowHeights = descriptor.rowHeights
     this.rowBounds = descriptor.rowBounds || []
     this.colBounds = descriptor.colBounds || []
     this.items = []
@@ -320,7 +321,16 @@ class Table {
 
   detectBounds() {
     if (!this.rowBounds.length) {
-      this.rowBounds = [ ...this.mostFrequentValues(this.items.map(item => item.transform[5]), this.numRows).reverse(), this.bottom ]
+      if (this.rowHeights) {
+        let cumSum = 0
+        let totalHeight = this.rowHeights.reduce((sum, height) => sum + height, 0)
+        this.rowBounds = [ this.top, ...this.rowHeights.map(height => {
+          cumSum += height
+          return this.top + ((this.bottom - this.top) * (cumSum / totalHeight))
+        })]
+      } else {
+        this.rowBounds = [...this.mostFrequentValues(this.items.map(item => item.transform[5]), this.numRows).reverse(), this.bottom]
+      }
     }
     if (!this.colBounds.length) {
       this.colBounds = [ ...this.mostFrequentValues(this.items.map(item => item.transform[4]), this.numCols), this.right ]

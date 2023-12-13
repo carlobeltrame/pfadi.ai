@@ -243,7 +243,8 @@ const loaders = [
       xGreaterThan: 48, xLessThan: 475, yGreaterThan: 45, yLessThan: 800
     }),
     tables: [
-      { page: 34, numCols: 5, numRows: 10, top: 540, bottom: 307 },
+      { page: 34, top: 540, bottom: 307, numCols: 5, numRows: 10 },
+      { page: 94, top: 525, bottom: 272, colBounds: [66, 177, 289, null], rowHeights: [2, 1, 3, 3, 2, 2, 2, 2, 2, 2] },
     ],
     textItemTransformer: detectHeadings(
       { fontSize: 16 },
