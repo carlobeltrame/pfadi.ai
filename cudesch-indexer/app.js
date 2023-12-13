@@ -242,6 +242,9 @@ const loaders = [
       fontSizeGreaterThan: 8,
       xGreaterThan: 48, xLessThan: 475, yGreaterThan: 45, yLessThan: 800
     }),
+    tables: [
+      { page: 34, numCols: 5, numRows: 10, top: 540, bottom: 307 },
+    ],
     textItemTransformer: detectHeadings(
       { fontSize: 16 },
       { regexp: /^\d\.(\D|$)/, xLessThan: 60, colorNot: [ 207, 49, 50 ] },
@@ -299,7 +302,7 @@ async function splittingLargeChaptersBetweenSentences (docs, handler, maxChapter
 
 async function cleanChapters (chapters) {
   const promptTemplate = new PromptTemplate({
-    template: `Putze den folgenden rohen Text heraus. Korrigiere überschüssigen Whitespace, entferne Zeilenumbrüche in der Mitte von Sätzen, entferne Trennstriche von den Zeilenenden, und formatiere den Text als Markdown. Gib den Text inhaltlich komplett unverändert aus. Gib nur den Markdown-Inhalt aus, ohne \`\`\`markdown etc. rundherum.
+    template: `Putze den folgenden rohen Text heraus. Korrigiere überschüssigen Whitespace, entferne Zeilenumbrüche in der Mitte von Sätzen, entferne Trennstriche von den Zeilenenden, und formatiere den Text als Markdown. Gib den Text inhaltlich komplett unverändert aus. Gib nur den Markdown-Inhalt aus, ohne \`\`\`markdown etc. rundherum. Falls du in einer Tabelle unbedingt Zeilenumbrüche machen musst, verwende <br>.
 
 Roher Text:
 {context}
@@ -416,7 +419,6 @@ async function indexTheory (loaders) {
     //console.log(chapters.map(c => c.pageContent).join('\n\n')); return
     //const index = Math.floor(Math.random() * chapters.length); console.log(chapters[index]); return // random chapter
     //console.log(chapters.map(chapter => chapter.metadata.pageNumber + '\t' + chapter.pageContent.split('\n')[0]).join('\n')); return // TOC
-
 
     console.log('cleaning', chapters.length, 'chapters')
     // Clean up all formatting artifacts from the PDF parsing process, resulting in nice Markdown text

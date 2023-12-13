@@ -8,6 +8,7 @@ export class CudeschPDFLoader extends PDFLoader {
     skip = 0,
     skipEnd = 0,
     textItemFilter = (item) => true,
+    tables = [],
     textItemTransformer = (item) => true,
     pdfjs = undefined,
     enabled = true,
@@ -18,6 +19,7 @@ export class CudeschPDFLoader extends PDFLoader {
     this.skip = skip
     this.skipEnd = skipEnd
     this.textItemFilter = textItemFilter
+    this.tables = tables.map(tableDescriptor => new Table(tableDescriptor)),
     this.textItemTransformer = textItemTransformer
     this.enabled = enabled
     this.pageBreaks = []
@@ -34,8 +36,11 @@ export class CudeschPDFLoader extends PDFLoader {
       console.log('loading', this.documentName)
       return await super.load()
     } catch (e) {
-      console.log(`Cannot load ${this.filePathOrBlob}. If you want to index "${this.documentName}", please place it at that location. For now, we will just skip this document. ${e}`)
-      return []
+      if (e.code === 'ENOENT') {
+        console.log(`Cannot load ${this.filePathOrBlob}. If you want to index "${this.documentName}", please place it at that location. For now, we will just skip this document. ${e}`)
+        return []
+      }
+      throw e
     }
   }
 
@@ -205,11 +210,32 @@ export class CudeschPDFLoader extends PDFLoader {
           if (a.transform[5] !== b.transform[5]) return b.transform[5] - a.transform[5]
           return a.transform[4] - b.transform[4]
         })
+        .reduce((items, item) => {
+          const containingTable = this.tables.find(table => table.containsItem(item))
+          if (containingTable) {
+            containingTable.addItem(item)
+          } else {
+            items.push(item)
+          }
+          return items
+        }, [])
         .filter((item) => {
           const result = this.textItemFilter(item, previousFilterItem)
           if (result) previousFilterItem = item
           return result
         })
+        .reduce((items, item, index, array) => {
+          const precedingTable = this.tables.find(table => table.shouldRenderBefore(item))
+          if (precedingTable) items.push(precedingTable.toItem())
+
+          items.push(item)
+
+          if (index === array.length - 1) {
+            const finishingTable = this.tables.find(table => table.page === item.page && table.rendered === false)
+            if (finishingTable) items.push(finishingTable.toItem())
+          }
+          return items
+        }, [])
         .map((item) => {
           const result = this.textItemTransformer(item, previousTransformerItem)
           previousTransformerItem = result
@@ -244,5 +270,106 @@ export class CudeschPDFLoader extends PDFLoader {
     completeChapter(hierarchy)
 
     return documents
+  }
+}
+
+class Table {
+  constructor (descriptor) {
+    this.page = descriptor.page
+    this.numRows = descriptor.numRows || (descriptor.rowBounds ? descriptor.rowBounds.length - 1 : 1)
+    this.numCols = descriptor.numCols || (descriptor.colBounds ? descriptor.colBounds.length - 1 : 1)
+    this.top = descriptor.top || (descriptor.rowBounds ? descriptor.rowBounds[0] || 3000 : 3000)
+    this.bottom = descriptor.bottom || (descriptor.rowBounds ? descriptor.rowBounds[descriptor.rowBounds.length - 1] || 0 : 0)
+    this.left = descriptor.left || (descriptor.colBounds ? descriptor.colBounds[0] || 0 : 0)
+    this.right = descriptor.right || (descriptor.colBounds ? descriptor.colBounds[descriptor.colBounds.length - 1] || 3000 : 3000)
+    this.rowBounds = descriptor.rowBounds || []
+    this.colBounds = descriptor.colBounds || []
+    this.items = []
+    this.rendered = false
+  }
+
+  containsItem(item) {
+    return item.page === this.page &&
+      item.transform[4] >= this.left && item.transform[4] < this.right &&
+      item.transform[5] >= this.bottom && item.transform[5] <= this.top
+  }
+
+  shouldRenderBefore(item) {
+    if (this.rendered) return false
+    return item.page > this.page ||
+      item.page === this.page && (
+        item.transform[5] < this.top ||
+        item.transform[5] === this.top && item.transform[4] >= this.right
+      )
+  }
+
+  addItem (item) {
+    // Heuristic: A space has a width of a little over 1/4 of the font size
+    const leftCorrection = (item.str.length - item.str.trimStart().length) * item.transform[0] * 0.27
+    const transform = item.transform.slice()
+    transform[4] += leftCorrection
+    this.items.push({ ...item, str: item.str.trimStart(), transform })
+  }
+
+  mostFrequentValues(values, n) {
+    values.sort((a, b) => values.filter(v => v.toString() === a.toString()).length - values.filter(v => v.toString() === b.toString()).length)
+    const mostFrequent = [...new Set(values)].slice(-n)
+    mostFrequent.sort((a, b) => a - b)
+    return mostFrequent
+  }
+
+  detectBounds() {
+    if (!this.rowBounds.length) {
+      this.rowBounds = [ ...this.mostFrequentValues(this.items.map(item => item.transform[5]), this.numRows).reverse(), this.bottom ]
+    }
+    if (!this.colBounds.length) {
+      this.colBounds = [ ...this.mostFrequentValues(this.items.map(item => item.transform[4]), this.numCols), this.right ]
+    }
+    this.rowBounds[0] = this.top
+    this.rowBounds[this.rowBounds.length - 1] = this.bottom
+    this.colBounds[0] = this.left
+    this.colBounds[this.colBounds.length - 1] = this.right
+  }
+
+  sortItemsIntoCells() {
+    if (this.sorted) return
+    this.sorted = true
+    this.detectBounds()
+
+    this.cells = Array.from({ length: this.numRows }, () => Array.from({ length: this.numCols }, () => []))
+    this.items.forEach(item => {
+      const row = this.rowBounds.findLastIndex(rowBound => rowBound >= item.transform[5])
+      const col = this.colBounds.findLastIndex(colBound => colBound <= item.transform[4])
+      this.cells[row][col].push(item.str.trim())
+    })
+    this.cells = this.cells.map(row => row.map(cell => cell.join(' ').trim()))
+  }
+
+  renderToMarkdown() {
+    if (this.numRows === 0) return ''
+    const header = '| ' + this.cells[0].join(' | ') + ' |'
+    const separator = '|---'.repeat(this.numCols) + '|'
+    const body = this.cells.slice(1).map(row => '| ' + row.join(' | ') + ' |')
+    return [header, separator, ...body].join('\n').trim()
+  }
+
+  toItem() {
+    this.rendered = true
+    this.sortItemsIntoCells()
+
+    const exampleItem = this.items.length ? this.items[0] : {
+      dir: 'ltr',
+      width: this.right - this.left,
+      height: this.top - this.bottom,
+      transform: [10, 0, 0, 0, this.left, this.top],
+      fontName: 'g_d0_f1',
+      page: this.page,
+      odd: !!(this.page % 2),
+      color: [0, 0, 0],
+    }
+    return {
+      ...exampleItem,
+      str: this.renderToMarkdown(),
+    }
   }
 }
