@@ -124,7 +124,6 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     details.appendChild(content)
 
     const scrollArea = document.createElement('article')
-    scrollArea.classList.add('scroll-y')
     scrollArea.innerHTML = marked.parse(entry.markdown)
     content.appendChild(scrollArea)
 

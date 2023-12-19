@@ -35,7 +35,7 @@ function combineChapterPieces($pieces) {
     $resultText = '';
     $previousSequenceNumber = $pieces[0]['metadata']['sequenceNumber'] - 1;
     foreach ($pieces as $piece) {
-        $resultText .= ($previousSequenceNumber < $piece['metadata']['sequenceNumber'] - 1) ? "\n[...]" : "\n";
+        $resultText .= ($previousSequenceNumber < $piece['metadata']['sequenceNumber'] - 1) ? "\n\n[...]\n" : "\n";
         $resultText .= "\n" . $piece['metadata']['originalText'];
         $previousSequenceNumber = $piece['metadata']['sequenceNumber'];
     }
