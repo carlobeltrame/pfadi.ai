@@ -226,13 +226,13 @@ export class CudeschPDFLoader extends PDFLoader {
         })
         .reduce((items, item, index, array) => {
           const precedingTable = this.tables.find(table => table.shouldRenderBefore(item))
-          if (precedingTable) items.push(precedingTable.toItem())
+          if (precedingTable) items.push(...precedingTable.toItems())
 
           items.push(item)
 
           if (index === array.length - 1) {
             const finishingTable = this.tables.find(table => table.page === item.page && table.rendered === false)
-            if (finishingTable) items.push(finishingTable.toItem())
+            if (finishingTable) items.push(...finishingTable.toItems())
           }
           return items
         }, [])
@@ -275,14 +275,16 @@ export class CudeschPDFLoader extends PDFLoader {
 
 class Table {
   constructor (descriptor) {
+    this.renderAsTable = descriptor.renderAsTable !== false
     this.page = descriptor.page
     this.numRows = descriptor.numRows || (descriptor.rowHeights ? descriptor.rowHeights.length : (descriptor.rowBounds ? descriptor.rowBounds.length - 1 : 1))
-    this.numCols = descriptor.numCols || (descriptor.colBounds ? descriptor.colBounds.length - 1 : 1)
+    this.numCols = descriptor.numCols || (descriptor.colWidths ? descriptor.colWidths.length : (descriptor.colBounds ? descriptor.colBounds.length - 1 : 1))
     this.top = descriptor.top || (descriptor.rowBounds ? descriptor.rowBounds[0] || 3000 : 3000)
     this.bottom = descriptor.bottom || (descriptor.rowBounds ? descriptor.rowBounds[descriptor.rowBounds.length - 1] || 0 : 0)
     this.left = descriptor.left || (descriptor.colBounds ? descriptor.colBounds[0] || 0 : 0)
     this.right = descriptor.right || (descriptor.colBounds ? descriptor.colBounds[descriptor.colBounds.length - 1] || 3000 : 3000)
     this.rowHeights = descriptor.rowHeights
+    this.colWidths = descriptor.colWidths
     this.rowBounds = descriptor.rowBounds || []
     this.colBounds = descriptor.colBounds || []
     this.items = []
@@ -333,7 +335,16 @@ class Table {
       }
     }
     if (!this.colBounds.length) {
-      this.colBounds = [ ...this.mostFrequentValues(this.items.map(item => item.transform[4]), this.numCols), this.right ]
+      if (this.colWidths) {
+        let cumSum = 0
+        let totalWidth = this.colWidths.reduce((sum, width) => sum + width, 0)
+        this.colBounds = [ this.left, ...this.colWidths.map(width => {
+          cumSum += width
+          return this.left + ((this.right - this.left) * (cumSum / totalWidth))
+        })]
+      } else {
+        this.colBounds = [...this.mostFrequentValues(this.items.map(item => item.transform[4]), this.numCols), this.right]
+      }
     }
     this.rowBounds[0] = this.top
     this.rowBounds[this.rowBounds.length - 1] = this.bottom
@@ -350,36 +361,48 @@ class Table {
     this.items.forEach(item => {
       const row = this.rowBounds.findLastIndex(rowBound => rowBound >= item.transform[5])
       const col = this.colBounds.findLastIndex(colBound => colBound <= item.transform[4])
-      this.cells[row][col].push(item.str.trim())
+      this.cells[row][col].push(item)
     })
-    this.cells = this.cells.map(row => row.map(cell => cell.join(' ').trim()))
   }
 
-  renderToMarkdown() {
+  renderCell(cell) {
+    return cell.map(item => item.str.trim()).join('\n').trim()
+  }
+
+  renderToMarkdownTable() {
+    const renderRow = (row) => '| ' + row.map(this.renderCell).map(c => c.replaceAll('\n', ' ')).join(' | ') + ' |'
     if (this.numRows === 0) return ''
-    const header = '| ' + this.cells[0].join(' | ') + ' |'
+    const header = renderRow(this.cells[0])
     const separator = '|---'.repeat(this.numCols) + '|'
-    const body = this.cells.slice(1).map(row => '| ' + row.join(' | ') + ' |')
-    return [header, separator, ...body].join('\n').trim()
+    const body = this.cells.slice(1).map(renderRow)
+    return [header, separator, ...body].join('\n')
   }
 
-  toItem() {
-    this.rendered = true
-    this.sortItemsIntoCells()
-
-    const exampleItem = this.items.length ? this.items[0] : {
+  exampleItemFrom(items) {
+    if (items.length) return items[0]
+    return {
+      str: '',
       dir: 'ltr',
-      width: this.right - this.left,
-      height: this.top - this.bottom,
+      width: 10 * (this.right - this.left),
+      height: 10 * (this.top - this.bottom),
       transform: [10, 0, 0, 0, this.left, this.top],
       fontName: 'g_d0_f1',
       page: this.page,
       odd: !!(this.page % 2),
       color: [0, 0, 0],
     }
-    return {
-      ...exampleItem,
-      str: this.renderToMarkdown(),
+  }
+
+  toItems() {
+    this.rendered = true
+    this.sortItemsIntoCells()
+
+    if (!this.renderAsTable) {
+      return this.cells.flat().map(cell => {
+        return { ...this.exampleItemFrom(cell), str: this.renderCell(cell) }
+      })
     }
+
+    return [{ ...this.exampleItemFrom(this.items), str: this.renderToMarkdownTable() }]
   }
 }
