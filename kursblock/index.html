@@ -224,6 +224,17 @@
     courseTypeSummary.textContent = `${courseTypeText}${targetGroupText}${mottoText}`
   }
 
+  function animateToggle(collapse) {
+    collapse.addEventListener('toggle', (event) => {
+      const childrenHeight = Array.from(event.target.children).reduce((sum, child) => {
+        const styles = window.getComputedStyle(child)
+        return sum + child.offsetHeight + parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom'])
+      }, 10)
+      event.target.style.maxHeight = `${childrenHeight}px`
+      console.log(event.target, childrenHeight)
+    })
+  }
+
   window.onload = () => {
     retrieveGoals().forEach((entry) => {
       addGoalsHistoryEntry(entry)
@@ -232,6 +243,7 @@
       addProgrammeHistoryEntry(entry)
     })
     updateCourseTypeSummary()
+    document.querySelectorAll(".generator-collapse").forEach(animateToggle)
   }
 </script>
 </head>
@@ -249,7 +261,7 @@
   </ul>
 </nav>
 
-<section id="main">
+<main id="main">
 <div class="font-sans">
   <h2>Kursblock-AI</h2>
 </div>
@@ -343,7 +355,7 @@ etc."></textarea>
   <option value="0">-</option>
 </select>
 </p>
-</section>
+</main>
 
 <footer>
   <p>&copy; 2023 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>

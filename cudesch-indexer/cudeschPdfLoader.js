@@ -260,6 +260,7 @@ export class CudeschPDFLoader extends PDFLoader {
           const level = item.heading
           hierarchy = hierarchy.slice(0, Math.max(level - 1, 0))
           hierarchy.push(item.str)
+          item.str = '#'.repeat(item.heading) + ' ' + item.str
         } else {
           nonHeaderLineFound = true
         }

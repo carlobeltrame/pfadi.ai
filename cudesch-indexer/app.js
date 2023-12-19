@@ -87,9 +87,9 @@ const onlyTextWhere = (rule = {}) => (item, previousItem) => {
 const detectHeadings = (h1Rule = { never: true }, h2Rule = { never: true }, h3Rule = { never: true }) => (item, previousItem) => {
   const cleanedStr = item.str.replaceAll(/\s+(?=\s)/g, '')
 
-  if (matchesRule(item, previousItem, h1Rule)) return { ...item, str: '# ' + cleanedStr, heading: 1 }
-  if (matchesRule(item, previousItem, h2Rule)) return { ...item, str: '## ' + cleanedStr, heading: 2 }
-  if (matchesRule(item, previousItem, h3Rule)) return { ...item, str: '### ' + cleanedStr, heading: 3 }
+  if (matchesRule(item, previousItem, h1Rule)) return { ...item, str: cleanedStr, heading: 1 }
+  if (matchesRule(item, previousItem, h2Rule)) return { ...item, str: cleanedStr, heading: 2 }
+  if (matchesRule(item, previousItem, h3Rule)) return { ...item, str: cleanedStr, heading: 3 }
 
   if (canBeJoinedHeading(item, previousItem, 1, h1Rule)) {
     return { ...item, str: cleanedStr, heading: 1, joinWithPrevious: true }
@@ -367,7 +367,11 @@ Zu unterteilender Text:
   // Try up to 3 times before failing permanently
   return await chain
     .withFallbacks({ fallbacks: [chain, chain] })
-    .invoke({ content, documentName: metadata.documentName, hierarchy: metadata.hierarchy.join('\n') })
+    .invoke({
+      content,
+      documentName: metadata.documentName,
+      hierarchy: metadata.hierarchy.map((entry, index) => '#'.repeat(index + 1) + ' ' + entry).join('\n'),
+    })
 }
 
 async function summarize (content, metadata) {
@@ -387,7 +391,11 @@ Gegebener Text der zusammengefasst werden soll:
     inputVariables: ['content', 'documentName', 'hierarchy']
   })
   const chain = RunnableSequence.from([ promptTemplate, llm ])
-  return await chain.invoke({ content, documentName: metadata.documentName, hierarchy: metadata.hierarchy.join('\n') })
+  return await chain.invoke({
+    content,
+    documentName: metadata.documentName,
+    hierarchy: metadata.hierarchy.map((entry, index) => '#'.repeat(index + 1) + ' ' + entry).join('\n'),
+  })
 }
 
 async function addMetadataAndSplitLargeChapters (chapters, pageBreaks) {

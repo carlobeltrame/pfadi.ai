@@ -26,6 +26,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>pfadi.ai - AI Tools für die Pfadi</title>
   <link rel="stylesheet" href="../styles.css">
+  <script src="./marked.min.js"></script>
 <script>
   const documents = <?php echo json_encode($documents); ?>
 
@@ -33,6 +34,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     return [
       document.querySelector('#title'),
       document.querySelector('#literature_submit'),
+      document.querySelector('#literature_copy_button'),
       document.querySelector('#literature'),
       document.querySelector('#literature_history_select'),
     ].concat(documents.map(d => document.querySelector(`#documents-${d.slug}`)))
@@ -40,10 +42,12 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
 
   function disableAllInputs() {
     allInputs().forEach(input => input.setAttribute('disabled', ''))
+    document.querySelector('#literature_results').style.display = 'none'
   }
 
   function enableAllInputs() {
     allInputs().forEach(input => input.removeAttribute('disabled'))
+    document.querySelector('#literature_results').style.display = 'block'
   }
 
   function saveLiterature(data) {
@@ -61,6 +65,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
       displayLiterature(entry)
+      enableAllInputs()
     }
   }
 
@@ -81,11 +86,50 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     const title = document.querySelector('#title')
     const literature = document.querySelector('#literature')
     title.value = data.title
-    literature.value = data.message
+    literature.dataset.markdown = data.markdown
+    literature.innerHTML = ''
+    data.message.forEach(entry => displayLiteratureEntry(literature, entry))
     documents.forEach(d => {
       const checkbox = document.querySelector(`#documents-${d.slug}`)
       checkbox.checked = (data.documents || []).includes(d.name)
     })
+  }
+
+  function displayLiteratureEntry(container, entry) {
+    const details = document.createElement('details')
+    details.classList.add('generator-collapse')
+
+    const summary = document.createElement('summary')
+    details.appendChild(summary)
+
+    const heading = document.createElement('span')
+    heading.classList.add('generator-collapse-heading')
+    heading.innerText = entry.sourceText
+    summary.appendChild(heading)
+
+    const sourceLink = document.createElement('a')
+    sourceLink.href = entry.sourceUrl
+    sourceLink.target = '_blank'
+    sourceLink.style.marginLeft = '0.5rem'
+    heading.appendChild(sourceLink)
+
+    const sourceLinkIcon = document.createElement('img')
+    sourceLinkIcon.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDAwIiBzdHJva2UtbGluZWNhcD0icm91bmQiPjxwYXRoIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGQ9Ik0xMiA5djVIMlY0aDUiLz48ZyBzdHJva2Utd2lkdGg9Ii42Ij48cGF0aCBzdHJva2Utd2lkdGg9Ii45NiIgZD0ibTggOCA2LTZNMTQgMmgtNE0xNCAydjQiLz48L2c+PC9nPjwvc3ZnPg=='
+    sourceLinkIcon.alt = 'Quelle'
+    sourceLinkIcon.width = 14
+    sourceLink.appendChild(sourceLinkIcon)
+
+    const content = document.createElement('div')
+    content.classList.add('paper')
+    details.appendChild(content)
+
+    const scrollArea = document.createElement('article')
+    scrollArea.classList.add('scroll-y')
+    scrollArea.innerHTML = marked.parse(entry.markdown)
+    content.appendChild(scrollArea)
+
+    container.appendChild(details)
+    animateToggle(details)
   }
 
   async function requestLiterature(e) {
@@ -115,10 +159,27 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     return false
   }
 
+  function copyLiteratureToClipboard() {
+    const literature = document.querySelector('#literature')
+    navigator.clipboard.writeText(literature.dataset.markdown)
+  }
+
+  function animateToggle(collapse) {
+    collapse.addEventListener('toggle', (event) => {
+      const childrenHeight = Array.from(event.target.children).reduce((sum, child) => {
+        const styles = window.getComputedStyle(child)
+        return sum + child.offsetHeight + parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom'])
+      }, 10)
+      event.target.style.maxHeight = `${childrenHeight}px`
+      console.log(event.target, childrenHeight)
+    })
+  }
+
   window.onload = () => {
     retrieveLiterature().forEach((entry) => {
       addLiteratureHistoryEntry(entry)
     })
+    document.querySelectorAll(".generator-collapse").forEach(animateToggle)
   }
 </script>
 </head>
@@ -136,7 +197,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   </ul>
 </nav>
 
-<section id="main">
+<main id="main">
 <div class="font-sans">
   <h2>AI-gestützte Pfadiliteratur-Suche</h2>
 </div>
@@ -166,8 +227,13 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
       <div id="literature_spinner" class="lds-dual-ring hidden"></div>
     </div>
   </form>
-  <label for="literature" class="generator-label">Pfadiliteratur</label>
-  <textarea id="literature" name="literature" class="generator-input" rows="20"></textarea>
+  <div id="literature_results" style="display: none">
+    <button id="literature_copy_button" class="generator-copy-button" onclick="copyLiteratureToClipboard()" disabled="disabled">Resultate als Text kopieren 📋</button>
+    <label for="literature" class="generator-label">
+      Pfadiliteratur
+    </label>
+    <div id="literature"></div>
+  </div>
 </article>
 <p>
   Die Literatur wurde mithilfe der Textverständnis-Fähigkeiten von ChatGPT indexiert und durchsuchbar gemacht. Falls du eine Broschüre vermisst oder zu einem Suchbegriff nichts finden kannst, kannst du dich unter cosinus ät gryfensee punkt ch melden.
@@ -184,7 +250,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   <option value="0">-</option>
 </select>
 </p>
-</section>
+</main>
 
 <footer>
   <p>&copy; 2023 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>

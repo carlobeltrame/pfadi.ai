@@ -81,14 +81,33 @@ function combineLiterature($data, $maxChapters = 3) {
 
     $chapters = array_slice($chapters, 0, $maxChapters);
 
-    return implode("\n\n", array_map(function ($chapter) {
+    $results = array_map(function ($chapter) {
         $startPageNumber = $chapter['metadata']['pageNumber'];
         $endPageNumber = $chapter['metadata']['endPageNumber'];
         $pageNumber = $startPageNumber == $endPageNumber ? $startPageNumber : "{$startPageNumber}-{$endPageNumber}";
+        $sourceUrl = $chapter['metadata']['source'];
+        if (str_starts_with($sourceUrl, 'https://issuu.com')) {
+            $sourceUrl .= "/{$startPageNumber}";
+        } else if (str_ends_with($sourceUrl, '.pdf')) {
+            $sourceUrl .= "#page={$startPageNumber}";
+        }
+        return [
+            'documentName' => $chapter['metadata']['documentName'],
+            'pages' => $pageNumber,
+            'markdown' => $chapter['metadata']['originalText'],
+            'hierarchy' => $chapter['metadata']['hierarchy'],
+            'summary' => $chapter['content'],
+            'sourceText' => $chapter['metadata']['documentName'] . ' S. ' . $pageNumber,
+            'sourceUrl' => $sourceUrl,
+        ];
+    }, $chapters);
 
-        return "[{$chapter['metadata']['documentName']} S. {$pageNumber}]
-{$chapter['metadata']['originalText']}";
-    }, $chapters));
+    $markdown = implode("\n\n", array_map(function ($chapter) {
+        return "[{$chapter['documentName']} S. {$chapter['pages']}]
+{$chapter['markdown']}";
+    }, $results));
+
+    return [$results, $markdown];
 }
 
 $title = $_GET['title'];
@@ -105,7 +124,7 @@ $chaptersResponse = $supabase->rpc('match_chapters', [
     'match_count' => 20,
     'document_names' => $documents,
 ])->execute();
-$literature = combineLiterature($chaptersResponse->data, 3);
+[$literature, $markdown] = combineLiterature($chaptersResponse->data, 3);
 
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
@@ -114,6 +133,7 @@ header('X-Accel-Buffering: no');
 
 $data = [
     'message' => $literature,
+    'markdown' => $markdown,
     'finished' => true,
     'title' => $title,
     'documents' => $documents,
