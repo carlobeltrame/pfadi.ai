@@ -88,9 +88,49 @@
 
 
 /* Reset some default styles for consistency */
-body, h1, h2, p, ul {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
     margin: 0;
-    padding: 5px 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: inside;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+strong {
+    font-weight: bold;
 }
 
 /* Set a playful, futuristic font */
@@ -104,6 +144,8 @@ body {
     min-height: 100vh;
     background-color: #00bfff;
     color: #333;
+    padding: 5px;
+    line-height: 1.3;
 }
 
 /* Header styles */
@@ -111,10 +153,12 @@ header {
     background-color: #00bfff;
     color: #fff;
     text-align: center;
+    padding: 5px;
 }
 
 header h1 {
     font-size: 36px;
+    font-weight: bold;
 }
 
 /* Navigation styles */
@@ -418,18 +462,55 @@ fieldset {
 
 .paper {
     font-family: 'Lato';
+    color: black;
     border: 1px solid lightgrey;
     padding: 2rem 3rem;
 }
 
-.paper, .paper h1, .paper h2, .paper h3, .paper h4 {
+.paper header {
+    margin-bottom: 0.8rem;
+}
+
+.paper h1, .paper h2, .paper h3, .paper h4, .paper h5 {
     color: black;
+    font-weight: bold;
+}
+
+.paper h1 {
+    font-size: 28px;
+    margin-top: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.paper h2 {
+    font-size: 24px;
+    margin-top: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.paper h3 {
+    font-size: 20px;
+    margin-top: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.paper h4 {
+    font-size: 18px;
+    margin-top: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.paper h5 {
+    font-size: 16px;
+    margin-top: 0.6rem;
+    margin-bottom: 0.4rem;
 }
 
 .paper header {
     background: none;
     color: black;
     text-align: left;
+    font-size: 85%;
 }
 
 .column-grid {
