@@ -193,6 +193,12 @@ main {
     margin: 20px auto;
 }
 
+@media(max-width: 600px) {
+    main {
+        padding: 10px 6px;
+    }
+}
+
 main h2 {
     font-size: 24px;
     color: #00bfff;
@@ -337,7 +343,7 @@ fieldset {
 .generator-collapse {
     margin-bottom: 16px;
     transition: max-height 0.5s ease-out;
-    max-height: 2.3rem;
+    max-height: 3rem;
     overflow: hidden;
 }
 
@@ -464,7 +470,7 @@ fieldset {
     font-family: 'Lato';
     color: black;
     border: 1px solid lightgrey;
-    padding: 2rem 3rem;
+    padding: 1rem 3rem 2rem;
 }
 
 .paper header {
@@ -511,6 +517,15 @@ fieldset {
     color: black;
     text-align: left;
     font-size: 85%;
+    margin-top: 0.8rem;
+}
+
+@media(max-width: 600px) {
+    .paper {
+        padding: 0.5rem 1.5rem 1.5rem;
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 .column-grid {

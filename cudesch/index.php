@@ -169,15 +169,16 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     navigator.clipboard.writeText(literature.dataset.markdown)
   }
 
+  function setToggleMaxHeight(collapse) {
+    const childrenHeight = Array.from(collapse.children).reduce((sum, child) => {
+      const styles = window.getComputedStyle(child)
+      return sum + child.offsetHeight + parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom'])
+    }, 10)
+    collapse.style.maxHeight = `${childrenHeight}px`
+  }
+
   function animateToggle(collapse) {
-    collapse.addEventListener('toggle', (event) => {
-      const childrenHeight = Array.from(event.target.children).reduce((sum, child) => {
-        const styles = window.getComputedStyle(child)
-        return sum + child.offsetHeight + parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom'])
-      }, 10)
-      event.target.style.maxHeight = `${childrenHeight}px`
-      console.log(event.target, childrenHeight)
-    })
+    collapse.addEventListener('toggle', (event) => setToggleMaxHeight(event.target))
   }
 
   window.onload = () => {
@@ -185,6 +186,10 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
       addLiteratureHistoryEntry(entry)
     })
     document.querySelectorAll(".generator-collapse").forEach(animateToggle)
+    document.querySelectorAll(".generator-collapse").forEach(setToggleMaxHeight)
+  }
+  window.onresize = () => {
+    document.querySelectorAll(".generator-collapse").forEach(setToggleMaxHeight)
   }
 </script>
 </head>
