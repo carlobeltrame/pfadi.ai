@@ -171,8 +171,39 @@ export class CudeschPDFLoader extends PDFLoader {
         return
       }
       if (chapterItems.length > 1) {
+        let content = ''
+        let bold = false
+        let emphasis = false
+        chapterItems.forEach(item => {
+          if (!item.str.trim()) return
+          if (item.str.trim() === '-') {
+            content += item.str.trim() + '\n'
+            return
+          }
+
+          if (!bold && item.bold && !item.heading) {
+            content += '**'
+            bold = true
+          }
+          if (!emphasis && item.emphasis && !item.heading) {
+            content += '_'
+            emphasis = true
+          }
+
+          if (emphasis && (!item.emphasis || item.heading)) {
+            content = content.slice(0, -1) + '_' + content.slice(-1)
+            emphasis = false
+          }
+          if (bold && (!item.bold || item.heading)) {
+            content = content.slice(0, -1) + '**' + content.slice(-1)
+            bold = false
+          }
+          if (!emphasis && !bold) content = content.slice(0, -1) + '\n'
+
+          content += item.str.trim() + ((bold || emphasis) ? ' ' : '\n')
+        })
         documents.push(new Document({
-          pageContent: chapterItems.map((item) => item.str).join('\n'),
+          pageContent: content,
           metadata: {
             ...metadata,
             documentName: this.documentName,
@@ -225,7 +256,7 @@ export class CudeschPDFLoader extends PDFLoader {
           return result
         })
         .reduce((items, item, index, array) => {
-          const precedingTable = this.tables.find(table => table.shouldRenderBefore(item))
+          const precedingTable = this.tables.find(table => table.page > this.skip && table.page <= pdf.numPages - this.skipEnd && table.shouldRenderBefore(item))
           if (precedingTable) items.push(...precedingTable.toItems())
 
           items.push(item)

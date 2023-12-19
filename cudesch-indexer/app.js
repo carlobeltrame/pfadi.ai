@@ -84,24 +84,31 @@ const canBeJoinedHeading = (item, previousItem, level, rule) => {
 const onlyTextWhere = (rule = {}) => (item, previousItem) => {
   return matchesRule(item, previousItem, rule)
 }
-const detectHeadings = (h1Rule = { never: true }, h2Rule = { never: true }, h3Rule = { never: true }) => (item, previousItem) => {
-  const cleanedStr = item.str.replaceAll(/\s+(?=\s)/g, '')
+function transformText({ h1 = { never: true }, h2 = { never: true }, h3 = { never: true }, bold = { never: true }, emphasis = { never: true } }) {
+  return (item, previousItem) => {
+    const cleanedStr = item.str.replaceAll(/\s+(?=\s)/g, '')
 
-  if (matchesRule(item, previousItem, h1Rule)) return { ...item, str: cleanedStr, heading: 1 }
-  if (matchesRule(item, previousItem, h2Rule)) return { ...item, str: cleanedStr, heading: 2 }
-  if (matchesRule(item, previousItem, h3Rule)) return { ...item, str: cleanedStr, heading: 3 }
+    if (matchesRule(item, previousItem, h1)) return { ...item, str: cleanedStr, heading: 1 }
+    if (matchesRule(item, previousItem, h2)) return { ...item, str: cleanedStr, heading: 2 }
+    if (matchesRule(item, previousItem, h3)) return { ...item, str: cleanedStr, heading: 3 }
 
-  if (canBeJoinedHeading(item, previousItem, 1, h1Rule)) {
-    return { ...item, str: cleanedStr, heading: 1, joinWithPrevious: true }
-  }
-  if (canBeJoinedHeading(item, previousItem, 2, h2Rule)) {
-    return { ...item, str: cleanedStr, heading: 2, joinWithPrevious: true }
-  }
-  if (canBeJoinedHeading(item, previousItem, 3, h3Rule)) {
-    return { ...item, str: cleanedStr, heading: 3, joinWithPrevious: true }
-  }
+    if (canBeJoinedHeading(item, previousItem, 1, h1)) {
+      return { ...item, str: cleanedStr, heading: 1, joinWithPrevious: true }
+    }
+    if (canBeJoinedHeading(item, previousItem, 2, h2)) {
+      return { ...item, str: cleanedStr, heading: 2, joinWithPrevious: true }
+    }
+    if (canBeJoinedHeading(item, previousItem, 3, h3)) {
+      return { ...item, str: cleanedStr, heading: 3, joinWithPrevious: true }
+    }
 
-  return { ...item, str: cleanedStr }
+    return {
+      ...item,
+      str: cleanedStr,
+      bold: matchesRule(item, previousItem, bold),
+      emphasis: matchesRule(item, previousItem, emphasis)
+    }
+  }
 }
 
 const loaders = [
@@ -113,11 +120,12 @@ const loaders = [
       xGreaterThanOnEvenPages: 132, xLessThanOnEvenPages: 525,
       yLessThan: 800
     }),
-    textItemTransformer: detectHeadings(
-      { fontSizeGreaterOrEq: 24, regexp: /^\d+\b/ },
-      { fontSizeGreaterOrEq: 14, regexp: /^\d+\.\d+\b/ },
-      { fontSizeGreaterOrEq: 11, regexp: /^\d+\.\d+\.\d+\b/ },
-    ),
+    textItemTransformer: transformText({
+      h1: { fontSizeGreaterOrEq: 24, regexp: /^\d+\b/ },
+      h2: { fontSizeGreaterOrEq: 14, regexp: /^\d+\.\d+\b/ },
+      h3: { fontSizeGreaterOrEq: 11, regexp: /^\d+\.\d+\.\d+\b/ },
+      bold: { fontName: ['g_d0_f2', 'g_d0_f7', 'g_d0_f9'] },
+    }),
     skip: 5,
     skipEnd: 6,
     enabled: true,
@@ -129,13 +137,14 @@ const loaders = [
       xGreaterThanOnOddPages: 70, xLessThanOnOddPages: 555,
       xGreaterThanOnEvenPages: 42, xLessThanOnEvenPages: 525,
       yGreaterThan: 35, yLessThan: 800,
-      anyOf: [{ fontNot: ['g_d0_f4', 'g_d0_f3'] }, { fontSizeGreaterThanOrEq: 12 }],
+      anyOf: [{ fontNameNot: ['g_d0_f4', 'g_d0_f3'] }, { fontSizeGreaterOrEq: 12 }],
     }),
-    textItemTransformer: detectHeadings(
-      { fontSize: 24, regexp: /^\d+\b/, fontNot: ['g_d0_f4', 'g_d0_f3'] },
-      { fontSize: 14, regexp: /^\d+\.\d+\b/, fontNot: ['g_d0_f4', 'g_d0_f3'] },
-      { fontSize: 11, regexp: /^\d+\.\d+\.\d+\b/ },
-    ),
+    textItemTransformer: transformText({
+      h1: { fontSize: 24, regexp: /^\d+\b/, fontNameNot: ['g_d0_f4', 'g_d0_f3'] },
+      h2: { fontSize: 14, regexp: /^\d+\.\d+\b/, fontNameNot: ['g_d0_f4', 'g_d0_f3'] },
+      h3: { fontSize: 11, regexp: /^\d+\.\d+\.\d+\b/ },
+      bold: { fontName: ['g_d0_f2'] },
+    }),
     skip: 3,
     skipEnd: 2,
     enabled: true,
@@ -143,12 +152,14 @@ const loaders = [
   new CudeschPDFLoader('documents/pfadiprofil.pdf', {
     source: 'https://issuu.com/pbs-msds-mss/docs/2120.01.de-pfadiprofil-p___dagogisc',
     documentName: PFADIPROFIL,
-    textItemFilter: onlyTextWhere({ yGreaterThan: 50, yLessThan: 800, fontNot: ['g_d0_f4'] }),
-    textItemTransformer: detectHeadings(
-      { fontSizeGreaterOrEq: 16, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
-      { fontSizeGreaterOrEq: 16, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
-      { fontSizeGreaterOrEq: 14, fontName: 'g_d0_f2' },
-    ),
+    textItemFilter: onlyTextWhere({ yGreaterThan: 50, yLessThan: 800, fontNameNot: ['g_d0_f4'] }),
+    textItemTransformer: transformText({
+      h1: { fontSizeGreaterOrEq: 16, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
+      h2: { fontSizeGreaterOrEq: 16, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
+      h3: { fontSizeGreaterOrEq: 14, fontName: 'g_d0_f2' },
+      bold: { fontName: ['g_d0_f2'] },
+      emphasis: { fontName: ['g_d0_f3'] },
+    }),
     skip: 4,
     skipEnd: 4,
     enabled: true,
@@ -162,11 +173,13 @@ const loaders = [
       yGreaterThan: 50, yLessThan: 800,
       anyOf: [{ page: 3, yLessThan: 500 }, { pageNot: 3 }],
     }),
-    textItemTransformer: detectHeadings(
-      { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
-      { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
-      { fontSize: 14, fontName: 'g_d0_f2' },
-    ),
+    textItemTransformer: transformText({
+      h1: { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
+      h2: { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
+      h3: { fontSize: 14, fontName: 'g_d0_f2' },
+      bold: { fontName: ['g_d0_f2', 'g_d0_f8', 'g_d0_f7'] },
+      emphasis: { fontName: ['g_d0_f4', 'g_d0_f7'] },
+    }),
     skip: 2,
     skipEnd: 2,
     enabled: true,
@@ -181,10 +194,12 @@ const loaders = [
       pageNot: [13, 24, 26],
       anyOf: [{ pageNot: 9 }, { page: 9, anyOf: [{ yGreaterThan: 525 }, { yLessThan: 200 }] }],
     }),
-    textItemTransformer: detectHeadings(
-      { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
-      { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
-    ),
+    textItemTransformer: transformText({
+      h1: { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
+      h2: { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
+      bold: { fontName: ['g_d0_f2'] },
+      emphasis: { fontName: ['g_d0_f6'] },
+    }),
     skip: 2,
     skipEnd: 3,
     enabled: true,
@@ -206,10 +221,12 @@ const loaders = [
       fontSizeGreaterThan: 8,
       pageNot: [7],
     }),
-    textItemTransformer: detectHeadings(
-      { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
-      { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
-    ),
+    textItemTransformer: transformText({
+      h1: { fontSize: 24, regexp: /^\d+\.(\D|$)/, fontName: 'g_d0_f2' },
+      h2: { fontSize: 14, regexp: /^\d+\.\d+/, fontName: 'g_d0_f2' },
+      bold: { fontName: ['g_d0_f7', 'g_d0_f2'] },
+      emphasis: { fontName: ['g_d0_f8', 'g_d0_f9', 'g_d0_f2'] },
+    }),
     skip: 3,
     skipEnd: 1,
     enabled: true,
@@ -224,11 +241,12 @@ const loaders = [
       pageNot: [26, 27]
     }),
     textItemTransformer: (item, previousItem) => {
-      return detectHeadings(
-        { fontSize: 18, fontName: 'g_d0_f2', regexp: /^\d+ / },
-        { fontSize: 10, fontName: 'g_d0_f2', regexp: /^\d+\.\d+ / },
-        //{ fontSize: 10, fontName: 'g_d0_f1', regexp: /^\d+\.\d+\.\d+ /, multiline: false },
-      )({ ...item, str: item.str.replaceAll('', '') }, previousItem)
+      return transformText({
+        h1: { fontSize: 18, fontName: 'g_d0_f2', regexp: /^\d+ / },
+        h2: { fontSize: 10, fontName: 'g_d0_f2', regexp: /^\d+\.\d+ / },
+        //h3: { fontSize: 10, fontName: 'g_d0_f1', regexp: /^\d+\.\d+\.\d+ /, multiline: false },
+        bold: { fontName: ['g_d0_f1', 'g_d0_f5'] },
+      })({ ...item, str: item.str.replaceAll('', '') }, previousItem)
     },
     skip: 6,
     skipEnd: 5,
@@ -266,16 +284,17 @@ const loaders = [
       { page: 199, top: 425, bottom: 134, left: 66, right: 400, rowHeights: [1, 1, 2, 2, 2, 2, 1, 2, 2, 1, 2, 1, 2], numCols: 2 },
       { page: 209, top: 285, bottom: 106, left: 66, right: 400, numRows: 13, colWidths: [7, 2, 3, 3] },
     ],
-    textItemTransformer: detectHeadings(
-      { fontSize: 16 },
-      { regexp: /^\d\.(\D|$)/, xLessThan: 60, colorNot: [ 207, 49, 50 ] },
-      { anyOf: [
-          { regexp: /^\d\s?\.(\d+\.?)?(\D|$)/, xLessThan: 60, color: [ 207, 49, 50 ] },
-          // In this section of the book, there are lots of small bold headings which aren't formatted
-          // like the other numbered h3 headings
-          { pageGreaterOrEq: 179, pageLessOrEq: 201, startOfLine: true, fontName: 'g_d0_f2' },
+    textItemTransformer: transformText({
+      h1: { fontSize: 16 },
+      h2: { regexp: /^\d\.(\D|$)/, xLessThan: 60, colorNot: [ 207, 49, 50 ] },
+      h3: { anyOf: [
+        { regexp: /^\d\s?\.(\d+\.?)?(\D|$)/, xLessThan: 60, color: [ 207, 49, 50 ] },
+        // In this section of the book, there are lots of small bold headings which aren't formatted
+        // like the other numbered h3 headings
+        { pageGreaterOrEq: 179, pageLessOrEq: 201, startOfLine: true, fontName: 'g_d0_f2' },
       ] },
-    ),
+      bold: { fontName: 'g_d0_f2' },
+    }),
     skip: 10,
     skipEnd: 7,
     enabled: true,
@@ -323,7 +342,7 @@ async function splittingLargeChaptersBetweenSentences (docs, handler, maxChapter
 
 async function cleanChapters (chapters) {
   const promptTemplate = new PromptTemplate({
-    template: `Putze den folgenden rohen Text heraus. Korrigiere überschüssigen Whitespace, entferne Zeilenumbrüche in der Mitte von Sätzen, entferne Trennstriche von den Zeilenenden, und formatiere den Text als Markdown. Gib den Text inhaltlich komplett unverändert aus. Gib nur den Markdown-Inhalt aus, ohne \`\`\`markdown etc. rundherum. Falls du in einer Tabelle unbedingt Zeilenumbrüche machen musst, verwende <br>.
+    template: `Putze den folgenden rohen Text heraus. Korrigiere überschüssigen oder fehlenden Whitespace, entferne Zeilenumbrüche in der Mitte von Sätzen, entferne Trennstriche von den Zeilenenden, und formatiere den Text inkl. Aufzählungen als Markdown. Gib den Text inhaltlich komplett unverändert aus. Gib nur den Markdown-Inhalt aus, ohne \`\`\`markdown etc. rundherum. Falls du in einer Tabelle unbedingt Zeilenumbrüche machen musst, verwende <br>.
 
 Roher Text:
 {context}
