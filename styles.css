@@ -426,6 +426,12 @@ fieldset {
     color: black;
 }
 
+.paper header {
+    background: none;
+    color: black;
+    text-align: left;
+}
+
 .column-grid {
     display:grid;
     grid-template-columns:1fr 1fr;

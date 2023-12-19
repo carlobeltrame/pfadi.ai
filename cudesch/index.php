@@ -123,6 +123,10 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
     content.classList.add('paper')
     details.appendChild(content)
 
+    const hierarchy = document.createElement('header')
+    hierarchy.innerText = entry.hierarchy.join(' → ')
+    content.appendChild(hierarchy)
+
     const scrollArea = document.createElement('article')
     scrollArea.innerHTML = marked.parse(entry.markdown)
     content.appendChild(scrollArea)
