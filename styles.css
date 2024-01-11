@@ -184,7 +184,7 @@ nav a {
 }
 
 /* Section styles */
-main {
+main, section {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -194,18 +194,18 @@ main {
 }
 
 @media(max-width: 600px) {
-    main {
+    main, section {
         padding: 10px 6px;
     }
 }
 
-main h2 {
+main h2, section h2 {
     font-size: 24px;
     color: #00bfff;
     font-weight: 600;
 }
 
-main p {
+main p, section p {
     font-size: 16px;
     margin-bottom: 0.5rem;
 }
@@ -264,7 +264,7 @@ footer {
         margin: 10px 0;
     }
 
-    main {
+    main, section {
         margin: 10px 0;
     }
 }
