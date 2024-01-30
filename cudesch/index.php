@@ -8,15 +8,22 @@ $slugify = new Cocur\Slugify\Slugify();
 
 $supabase = new Supabase\CreateClient($_ENV['SUPABASE_API_KEY'], $_ENV['SUPABASE_PROJECT_ID']);
 
-$documentsResponse = $supabase->from('document_names')->select()->execute();
+$documents = [];
 
-$documents = array_map(function($d) use ($slugify) {
-  return [
-    'slug' => $slugify->slugify($d['document_name']),
-    'name' => $d['document_name'],
-    'source' => $d['source'],
-  ];
-}, $documentsResponse->data);
+try {
+  $documentsResponse = $supabase->from('document_names')->select()->execute();
+
+  $documents = array_map(function($d) use ($slugify) {
+    return [
+      'slug' => $slugify->slugify($d['document_name']),
+      'name' => $d['document_name'],
+      'source' => $d['source'],
+    ];
+  }, $documentsResponse->data);
+} catch(Error) {
+  // Supabase project is currently unavailable
+}
+
 usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
 ?>
 <!DOCTYPE html>
@@ -212,6 +219,11 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   <h2>AI-gestützte Pfadiliteratur-Suche</h2>
 </div>
 
+<?php if(count($documents) == 0) { ?>
+<article class="post-it" style="max-width: 300px; min-height: 250px; margin: 30px auto;">
+  <p style="font-size: 23px">Die Pfadiliteratur-Suche ist leider gerade nicht verfügbar&hellip; Versuche es später nochmals.</p>
+</article>
+<?php } else { ?>
 <article id="block" class="generator-article">
   <form id="literature_form" onsubmit="return requestLiterature(event)">
     <div class="generator-input-group">
@@ -260,6 +272,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   <option value="0">-</option>
 </select>
 </p>
+<?php } ?>
 </main>
 
 <footer>
