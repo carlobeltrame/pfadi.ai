@@ -30,7 +30,7 @@ const supabaseClientParams = () => ({
 })
 const llm = new SwissGermanLLM({
   maxTokens: -1,
-  modelName: process.env.OPENAI_MODEL_NAME || 'gpt-4-1106-preview',
+  modelName: process.env.OPENAI_MODEL_NAME || 'gpt-4-0125-preview',
 })
 const embeddings = new OpenAIEmbeddings()
 

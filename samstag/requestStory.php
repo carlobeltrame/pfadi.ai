@@ -24,18 +24,21 @@ function renderSSE($data, $eventName = 'data') {
 
 function calculateCost($input, $output) {
     $costs = [
-        'gpt-4-1106-preview' => [ 'input' => 0.01, 'output' => 0.03 ],
-        'gpt-4' => [ 'input' => 0.01, 'output' => 0.03 ],
-        'gpt-3-1106-preview' => [ 'input' => 0.01, 'output' => 0.03 ],
-        'gpt-3' => [ 'input' => 0.01, 'output' => 0.03 ],
+        'gpt-4-0125-preview' => [ 'input' => 10, 'output' => 30 ],
+        'gpt-4-1106-preview' => [ 'input' => 10, 'output' => 30 ],
+        'gpt-4' => [ 'input' => 30, 'output' => 60 ],
+        'gpt-3.5-turbo-1106' => [ 'input' => 1, 'output' => 2 ],
+        'gpt-3.5-turbo-0613' => [ 'input' => 1.5, 'output' => 2 ],
+        'gpt-3.5-turbo-16k-0613' => [ 'input' => 3, 'output' => 4 ],
+        'gpt-3.5-turbo-0301' => [ 'input' => 1.5, 'output' => 2 ],
     ];
-    $cost = $costs[$_ENV['OPENAI_MODEL_NAME']] ?? $costs['gpt-4-1106-preview'];
+    $cost = $costs[$_ENV['OPENAI_MODEL_NAME']] ?? $costs['gpt-4-0125-preview'];
 
     // Calculate usage, because OpenAI does not report usage on streamed responses
     $tokenizer = new Gioni06\Gpt3Tokenizer\Gpt3Tokenizer(new Gioni06\Gpt3Tokenizer\Gpt3TokenizerConfig());
     $inputTokens = $tokenizer->encode($input);
     $outputTokens = $tokenizer->encode($output);
-    return count($inputTokens) * $cost['input'] / 1000 + count($outputTokens) * $cost['output'] / 1000;
+    return count($inputTokens) * $cost['input'] / 1000000 + count($outputTokens) * $cost['output'] / 1000000;
 }
 
 $targetGroups = [
@@ -97,7 +100,7 @@ Die Story sollte maximal 2 Abschnitte lang sein, sollte in sich abgeschlossen se
 Beispiel:
 {$example}
 
-Schreibe nun eine Story zu folgendem Thema. Gib ausschiesslich den Story-Text aus, wie im Beispiel oben." ],
+Schreibe nun eine Story zu folgendem Thema. Gib ausschiesslich den Story-Text aus, wie im Beispiel oben. Wiederhole nicht das Thema und lass auch das Prefix \"Story:\" weg." ],
     ['role' => 'user', 'content' => "Thema: {$title}\nStory:"],
 ];
 
