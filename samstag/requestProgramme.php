@@ -49,24 +49,25 @@ $targetGroups = [
 $targetGroup = $targetGroups[$_GET['target_group']] ?? $targetGroups['wolfsstufe'];
 
 $targetGroupDescriptions = [
-  'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
-  'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
-  'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
-  'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
+    'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
+    'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
+    'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
+    'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
 ];
 $targetGroupDescription = $targetGroupDescriptions[$_GET['target_group']] ?? $targetGroupDescriptions['gemischt'];
 
-$activityTimes = [
-  'biberstufe' => '2 Stunden an einem Samstagnachmittag',
-  'wolfsstufe' => '2.5 Stunden an einem Samstagnachmittag',
-  'pfadistufe' => '2.5 Stunden an einem Samstagnachmittag',
-  'piostufe' => '3 Stunden an einem Samstagnachmittag',
+$defaultTimeframes = [
+    'biberstufe' => 'Samstagnachmittag 14:00 bis 16:00',
+    'wolfsstufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'pfadistufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'piostufe' => 'Samstagnachmittag 14:00 bis 17:00',
 ];
-$activityTime = $activityTimes[$_GET['target_group']] ?? $activityTimes['wolfsstufe'];
+$timeframe = $_GET['timeframe'] ?? $defaultTimeframes[$_GET['target_group']] ?? $defaultTimeframes['wolfsstufe'];
 
 $examples = [
     'biberstufe' => [
         "Thema: Reh und Hase
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:00
 Story: Wir treffen einen Hasen und ein Reh. Wir ahmen die Bewegungen dieser Tiere nach und bemerken, dass sie andere Fähigkeiten haben als wir Menschen.
 
 Programm zu diesem Thema und dieser Story:
@@ -79,6 +80,7 @@ Programm zu diesem Thema und dieser Story:
 15:25-15:45 Auf dem Feuer bräteln wir uns Schlangenbrot als Zvieri.
 15:45-16:00 Wir machen uns auf den Rückweg und machen unser kleines Abschieds-Ritual.",
         "Thema: Unter Wasser
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:00
 Story: Eine Meerjungfrau hat ihren Schatz verloren. Nach einigen Tauch-Übungen können wir mit ihr unter Wasser gehen und finden dort den Schatz.
 
 Programm zu diesem Thema und dieser Story:
@@ -95,6 +97,7 @@ Programm zu diesem Thema und dieser Story:
     ],
   'wolfsstufe' => [
       "Thema: Jack Sparrow und der geheime Schatz
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Jack Sparrow sucht einen geheimen Schatz. Wir helfen ihm suchen. Unterwegs treffen wir einen Papageien, besiegen einen Gorilla und zeigen einem Piraten unsere Stärke. Am Zielort finden wir mithilfe der Karte den Schatz: Zutaten für Schoggibananen.
 
 Programm zu diesem Thema und dieser Story:
@@ -109,6 +112,7 @@ Programm zu diesem Thema und dieser Story:
 15:20-16:00 Wir machen das einzig logische: Schoggibananen.
 16:00-16:30 Wir machen noch New Games und gehen dann zurück.",
       "Thema: Cowboys
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Wir bringen einen gestohlenen Sack Gold zurück zu seinem Besitzer, einem Cowboy. Dann fangen wir noch mit Hilfe des Sheriffs die Gaunerinnen ein, die das Gold gestohlen haben.
 
 Programm zu diesem Thema und dieser Story:
@@ -124,6 +128,7 @@ Programm zu diesem Thema und dieser Story:
   ],
   'pfadistufe' => [
       "Thema: Alchemisten
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Die Alchemisten haben unsere Fahne geklaut, und wir müssen sie zurückholen. Mit der Hilfe eines abtrünnigen Alchemisten finden und sabotieren wir das Ritual der Alchemisten, welche unsere Fahne zu Gold verarbeiten wollen.
 
 Programm zu diesem Thema und dieser Story:
@@ -136,6 +141,7 @@ Programm zu diesem Thema und dieser Story:
 15:50-16:00 Endlich finden wir das Ritual. Die Pfadis müssen für die Störzauber einen grossen Kreis um das Ritual bilden. Es hat ein farbiges Feuer mit einem Wasserkessel darauf. Wir müssen die 3 Zaubersprüche gemeinsam aufsagen. Als wir fertig sind knallt es, die Alchemisten spucken Blut und fallen bewusstlos um. Wir können unsere Fahne zurückholen.
 16:00-16:30 Wir essen zur Feier des Tages noch einen Zvieri und gehen dann zurück.",
       "Thema: Hammerschmied
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Wir helfen einem Schmied, dessen Hammer geklaut wurde. Unterwegs finden wir heraus, dass der Hammer eingeschmolzen wurde, und stellen einen neuen Hammer her. Schliesslich stellt sich heraus dass der Schmied ein Betrüger war, und wir geben den Hammer dem echten Schmied.
 
 Programm zu diesem Thema und dieser Story:
@@ -162,13 +168,13 @@ $title = $_GET['title'];
 $story = $_GET['story'];
 $messages = [
     ['role' => 'system', 'content' => "Schreibe Pfadiprogramm für {$targetGroupDescription}. Vorgegeben sind das Thema sowie die grobe Story.
-Das Programm sollte in sich abgeschlossen sein und in ca. {$activityTime} durchführbar sein.
+Das Programm sollte in sich abgeschlossen sein und realistisch durchführbar sein.
 
 Beispiel:
 {$example}
 
 Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
-    ['role' => 'user', 'content' => "Thema: {$title}\nStory:\n{$story}\n\nProgramm zu diesem Thema und dieser Story:\n"],
+    ['role' => 'user', 'content' => "Thema: {$title}\nDurchführungszeit: {$timeframe}\nStory:\n{$story}\n\nProgramm zu diesem Thema und dieser Story:\n"],
 ];
 
 $stream = $client->chat()->createStreamed([
@@ -188,6 +194,7 @@ $data = [
     'title' => $title,
     'ageGroup' => $_GET['target_group'],
     'targetGroup' => $targetGroup,
+    'timeframe' => $timeframe,
     'story' => $story,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
@@ -216,7 +223,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO samstag_programme (title, target_group, story, programme, cost) VALUES (?,?,?,?,?)";
+    $sql = "INSERT INTO samstag_programme (title, target_group, timeframe, story, programme, cost) VALUES (?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['targetGroup'], $data['story'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['targetGroup'], $data['timeframe'], $data['story'], $data['message'], $cost]);
 }

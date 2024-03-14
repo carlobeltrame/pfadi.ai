@@ -11,6 +11,7 @@
       document.querySelector('#title'),
       document.querySelector('#randomize_title'),
       document.querySelector('#target_group'),
+      document.querySelector('#timeframe'),
       document.querySelector('#story_submit'),
       document.querySelector('#story'),
       document.querySelector('#programme_submit'),
@@ -51,6 +52,28 @@
     }
   }
 
+  function updateTargetGroup() {
+    const timeframe = document.querySelector('#timeframe')
+    const targetGroup = document.querySelector('#target_group')
+    const defaultTimeframes = {
+      biberstufe: 'Samstagnachmittag 14:00 bis 16:00',
+      wolfsstufe: 'Samstagnachmittag 14:00 bis 16:30',
+      pfadistufe: 'Samstagnachmittag 14:00 bis 16:30',
+      piostufe: 'Samstagnachmittag 14:00 bis 17:00',
+    }
+    const previousDefaultTimeframe = defaultTimeframes[previousTargetGroup]
+    const newDefaultTimeframe = defaultTimeframes[targetGroup.value]
+    if (previousDefaultTimeframe
+      && newDefaultTimeframe
+      && timeframe.value != null
+      && (previousDefaultTimeframe === timeframe.value.trim() || '' === timeframe.value.trim())
+    ) {
+      timeframe.value = newDefaultTimeframe
+    }
+
+    previousTargetGroup = targetGroup.value
+  }
+
   function saveStory(data) {
     const key = 'samstag-history-story'
     const stored = JSON.parse(localStorage.getItem(key)) || []
@@ -85,13 +108,15 @@
   function displayStory(data) {
     const title = document.querySelector('#title')
     const targetGroup = document.querySelector('#target_group')
+    const timeframe = document.querySelector('#timeframe')
     const story = document.querySelector('#story')
     const programme = document.querySelector('#programme')
     const programmeHistorySelect = document.querySelector('#programme_history_select')
     const material = document.querySelector('#material')
     const materialHistorySelect = document.querySelector('#material_history_select')
     title.value = data.title
-    targetGroup.value = data.targetGroup.toLowerCase()
+    previousTargetGroup = targetGroup.value = data.targetGroup.toLowerCase()
+    timeframe.value = data.timeframe
     story.value = data.message
     programme.value = ''
     programmeHistorySelect.value = '0'
@@ -164,13 +189,15 @@
   function displayProgramme(data) {
     const title = document.querySelector('#title')
     const targetGroup = document.querySelector('#target_group')
+    const timeframe = document.querySelector('#timeframe')
     const story = document.querySelector('#story')
     const programme = document.querySelector('#programme')
     const storyHistorySelect = document.querySelector('#story_history_select')
     const material = document.querySelector('#material')
     const materialHistorySelect = document.querySelector('#material_history_select')
     title.value = data.title
-    targetGroup.value = data.targetGroup.toLowerCase()
+    previousTargetGroup = targetGroup.value = data.targetGroup.toLowerCase()
+    timeframe.value = data.timeframe
     story.value = data.story
     programme.value = data.message
     storyHistorySelect.value = '0'
@@ -244,13 +271,15 @@
   function displayMaterial(data) {
     const title = document.querySelector('#title')
     const targetGroup = document.querySelector('#target_group')
+    const timeframe = document.querySelector('#timeframe')
     const story = document.querySelector('#story')
     const programme = document.querySelector('#programme')
     const material = document.querySelector('#material')
     const storyHistorySelect = document.querySelector('#story_history_select')
     const programmeHistorySelect = document.querySelector('#programme_history_select')
     title.value = data.title
-    targetGroup.value = data.targetGroup.toLowerCase()
+    previousTargetGroup = targetGroup.value = data.targetGroup.toLowerCase()
+    timeframe.value = data.timeframe
     story.value = data.story
     programme.value = data.programme
     material.value = data.message
@@ -300,8 +329,11 @@
     return formData
   }
 
+  let previousTargetGroup = null
+
   window.onload = () => {
     setRandomTitle(false)
+    previousTargetGroup = document.querySelector('#target_group').value
     retrieveStory().forEach((entry) => {
       addStoryHistoryEntry(entry)
     })
@@ -344,11 +376,15 @@
     </div>
     <div class="generator-input-group">
       <label for="target_group" class="generator-label">Stufe</label>
-      <select id="target_group" class="generator-input" name="target_group" required>
+      <select id="target_group" class="generator-input" name="target_group" required onchange="updateTargetGroup()">
         <option value="biberstufe">Biberstufe</option>
         <option value="wolfsstufe" selected>Wolfsstufe</option>
         <option value="pfadistufe">Pfadistufe</option>
       </select>
+    </div>
+    <div class="generator-input-group">
+      <label for="timeframe" class="generator-label">Durchführungszeit</label>
+      <input type="text" id="timeframe" name="timeframe" class="generator-input" maxlength="128" value="Samstagnachmittag 14:00 bis 16:30">
     </div>
     <div class="generator-submit-row">
       <button id="story_submit" type="submit" class="generator-submit">Roten Faden generieren und 2 Rappen von Cosinus verbrauchen</button>

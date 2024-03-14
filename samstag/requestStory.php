@@ -51,38 +51,44 @@ $targetGroups = [
 $targetGroup = $targetGroups[$_GET['target_group']] ?? $targetGroups['gemischt'];
 
 $targetGroupDescriptions = [
-  'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
-  'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
-  'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
-  'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
+    'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
+    'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
+    'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
+    'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
 ];
 $targetGroupDescription = $targetGroupDescriptions[$_GET['target_group']] ?? $targetGroupDescriptions['gemischt'];
 
-$activityTimes = [
-    'biberstufe' => '2 Stunden an einem Samstagnachmittag',
-    'wolfsstufe' => '2.5 Stunden an einem Samstagnachmittag',
-    'pfadistufe' => '2.5 Stunden an einem Samstagnachmittag',
-    'piostufe' => '3 Stunden an einem Samstagnachmittag',
+$defaultTimeframes = [
+    'biberstufe' => 'Samstagnachmittag 14:00 bis 16:00',
+    'wolfsstufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'pfadistufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'piostufe' => 'Samstagnachmittag 14:00 bis 17:00',
 ];
-$activityTime = $activityTimes[$_GET['target_group']] ?? $activityTimes['wolfsstufe'];
+$timeframe = $_GET['timeframe'] ?? $defaultTimeframes[$_GET['target_group']] ?? $defaultTimeframes['wolfsstufe'];
 
 $examples = [
     'biberstufe' => [
         "Thema: Reh und Hase
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:00
 Story: Wir treffen einen Hasen und ein Reh. Wir ahmen die Bewegungen dieser Tiere nach und bemerken, dass sie andere Fähigkeiten haben als wir Menschen.",
         "Thema: Unter Wasser
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:00
 Story: Eine Meerjungfrau hat ihren Schatz verloren. Nach einigen Tauch-Übungen können wir mit ihr unter Wasser gehen und finden dort den Schatz.",
     ],
     'wolfsstufe' => [
         "Thema: Jack Sparrow und der geheime Schatz
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Jack Sparrow sucht einen geheimen Schatz. Wir helfen ihm suchen. Unterwegs treffen wir einen Papageien, besiegen einen Gorilla und zeigen einem Piraten unsere Stärke. Am Zielort finden wir mithilfe der Karte den Schatz: Zutaten für Schoggibananen.",
         "Thema: Cowboys
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Wir bringen einen gestohlenen Sack Gold zurück zu seinem Besitzer, einem Cowboy. Dann fangen wir noch mit Hilfe des Sheriffs die Gaunerinnen ein, die das Gold gestohlen haben."
     ],
     'pfadistufe' => [
         "Thema: Alchemisten
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Die Alchemisten haben unsere Fahne geklaut, und wir müssen sie zurückholen. Mit der Hilfe eines abtrünnigen Alchemisten finden und sabotieren wir das Ritual der Alchemisten, welche unsere Fahne zu Gold verarbeiten wollen.",
         "Thema: Hammerschmied
+Durchführungszeit: Samstagnachmittag 14:00 bis 16:30
 Story: Wir helfen einem Schmied, dessen Hammer geklaut wurde. Unterwegs finden wir heraus, dass der Hammer eingeschmolzen wurde, und stellen einen neuen Hammer her. Schliesslich stellt sich heraus dass der Schmied ein Betrüger war, und wir geben den Hammer dem echten Schmied."
     ],
 ];
@@ -95,13 +101,13 @@ if (is_array($example)) {
 $title = $_GET['title'];
 $messages = [
     ['role' => 'system', 'content' => "Schreibe eine Story für eine Pfadiaktivität für {$targetGroupDescription}.
-Die Story sollte maximal 2 Abschnitte lang sein, sollte in sich abgeschlossen sein und in ca. {$activityTime} durchführbar sein.
+Die Story sollte maximal 2 Abschnitte lang sein, sollte in sich abgeschlossen sein und realistisch durchführbar sein.
 
 Beispiel:
 {$example}
 
 Schreibe nun eine Story zu folgendem Thema. Gib ausschiesslich den Story-Text aus, wie im Beispiel oben. Wiederhole nicht das Thema und lass auch das Prefix \"Story:\" weg." ],
-    ['role' => 'user', 'content' => "Thema: {$title}\nStory:"],
+    ['role' => 'user', 'content' => "Thema: {$title}\nDurchführungszeit: {$timeframe}\nStory:"],
 ];
 
 $stream = $client->chat()->createStreamed([
@@ -120,6 +126,7 @@ $data = [
     'finished' => false,
     'title' => $title,
     'targetGroup' => $targetGroup,
+    'timeframe' => $timeframe,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
 ];
@@ -147,7 +154,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO samstag_stories (title, target_group, story, cost) VALUES (?,?,?,?)";
+    $sql = "INSERT INTO samstag_stories (title, target_group, timeframe, story, cost) VALUES (?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['targetGroup'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['targetGroup'], $data['timeframe'], $data['message'], $cost]);
 }

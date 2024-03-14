@@ -49,20 +49,20 @@ $targetGroups = [
 $targetGroup = $targetGroups[$_GET['target_group']] ?? $targetGroups['wolfsstufe'];
 
 $targetGroupDescriptions = [
-  'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
-  'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
-  'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
-  'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
+    'biberstufe' => 'Kinder zwischen 4 und 7 Jahren',
+    'wolfsstufe' => 'Wölfli zwischen 7 und 11 Jahren',
+    'pfadistufe' => 'Pfadis zwischen 11 und 15 Jahren',
+    'piostufe' => 'Jugendliche zwischen 14 und 16 Jahren',
 ];
 $targetGroupDescription = $targetGroupDescriptions[$_GET['target_group']] ?? $targetGroupDescriptions['gemischt'];
 
-$activityTimes = [
-  'biberstufe' => '2 Stunden an einem Samstagnachmittag',
-  'wolfsstufe' => '2.5 Stunden an einem Samstagnachmittag',
-  'pfadistufe' => '2.5 Stunden an einem Samstagnachmittag',
-  'piostufe' => '3 Stunden an einem Samstagnachmittag',
+$defaultTimeframes = [
+    'biberstufe' => 'Samstagnachmittag 14:00 bis 16:00',
+    'wolfsstufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'pfadistufe' => 'Samstagnachmittag 14:00 bis 16:30',
+    'piostufe' => 'Samstagnachmittag 14:00 bis 17:00',
 ];
-$activityTime = $activityTimes[$_GET['target_group']] ?? $activityTimes['wolfsstufe'];
+$timeframe = $_GET['timeframe'] ?? $defaultTimeframes[$_GET['target_group']] ?? $defaultTimeframes['wolfsstufe'];
 
 $examples = [
     'biberstufe' => [
@@ -259,6 +259,7 @@ $data = [
     'title' => $title,
     'ageGroup' => $_GET['target_group'],
     'targetGroup' => $targetGroup,
+    'timeframe' => $timeframe,
     'story' => $story,
     'programme' => $programme,
     'uuid' => uniqid(),
@@ -288,7 +289,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO samstag_material (title, target_group, story, programme, material, cost) VALUES (?,?,?,?,?,?)";
+    $sql = "INSERT INTO samstag_material (title, target_group, timeframe, story, programme, material, cost) VALUES (?,?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['title'], $data['targetGroup'], $data['story'], $data['programme'], $data['message'], $cost]);
+    $stmt->execute([$data['title'], $data['targetGroup'], $data['timeframe'], $data['story'], $data['programme'], $data['message'], $cost]);
 }
