@@ -154,5 +154,5 @@ if ($host && $dbname && $user && $password) {
     $pdo = new PDO($dsn, $user, $password, $options);
     $sql = "INSERT INTO cudesch_literature (title, documents, literature, cost) VALUES (?,?,?,?)";
     $stmt= $pdo->prepare($sql);
-    $stmt->execute([$data['title'], json_encode($data['documents']), $data['message'], $cost]);
+    $stmt->execute([$data['title'], json_encode($data['documents']), json_encode($data['message']), $cost]);
 }
