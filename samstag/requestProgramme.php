@@ -23,9 +23,13 @@ function renderSSE($data, $eventName = 'data') {
 
 function calculateCost($input, $output) {
     $costs = [
+        'gpt-4o' => [ 'input' => 5, 'output' => 15 ],
+        'gpt-4-turbo' => [ 'input' => 10, 'output' => 30 ],
+        'gpt-4-turbo-2024-04-09' => [ 'input' => 10, 'output' => 30 ],
         'gpt-4-0125-preview' => [ 'input' => 10, 'output' => 30 ],
         'gpt-4-1106-preview' => [ 'input' => 10, 'output' => 30 ],
         'gpt-4' => [ 'input' => 30, 'output' => 60 ],
+        'gpt-3.5-turbo-0125' => [ 'input' => 0.5, 'output' => 1.5 ],
         'gpt-3.5-turbo-1106' => [ 'input' => 1, 'output' => 2 ],
         'gpt-3.5-turbo-0613' => [ 'input' => 1.5, 'output' => 2 ],
         'gpt-3.5-turbo-16k-0613' => [ 'input' => 3, 'output' => 4 ],
@@ -173,7 +177,7 @@ Das Programm sollte in sich abgeschlossen sein und realistisch durchführbar sei
 Beispiel:
 {$example}
 
-Schreibe nun das Programm für folgenden Block. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
+Schreibe nun das Programm für folgende Aktivität. Gib ausschliesslich das Programm aus, formatiert wie im Beispiel oben." ],
     ['role' => 'user', 'content' => "Thema: {$title}\nDurchführungszeit: {$timeframe}\nStory:\n{$story}\n\nProgramm zu diesem Thema und dieser Story:\n"],
 ];
 
