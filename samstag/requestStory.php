@@ -22,7 +22,7 @@ function renderSSE($data, $eventName = 'data') {
     return implode("\n", $event) . "\n\n";
 }
 
-function calculateCost($input, $output) {
+function calculateCost($usage) {
     $costs = [
         'gpt-4o' => [ 'input' => 5, 'output' => 15 ],
         'gpt-4-turbo' => [ 'input' => 10, 'output' => 30 ],
@@ -38,11 +38,9 @@ function calculateCost($input, $output) {
     ];
     $cost = $costs[$_ENV['OPENAI_MODEL_NAME']] ?? $costs['gpt-4-0125-preview'];
 
-    // Calculate usage, because OpenAI does not report usage on streamed responses
-    $tokenizer = new Gioni06\Gpt3Tokenizer\Gpt3Tokenizer(new Gioni06\Gpt3Tokenizer\Gpt3TokenizerConfig());
-    $inputTokens = $tokenizer->encode($input);
-    $outputTokens = $tokenizer->encode($output);
-    return count($inputTokens) * $cost['input'] / 1000000 + count($outputTokens) * $cost['output'] / 1000000;
+    $inputTokens = $usage->promptTokens ?? 0;
+    $outputTokens = $usage->completionTokens ?? 0;
+    return $inputTokens * $cost['input'] / 1000000 + $outputTokens * $cost['output'] / 1000000;
 }
 
 $targetGroups = [
@@ -118,6 +116,7 @@ $stream = $client->chat()->createStreamed([
     'model' => $_ENV['OPENAI_MODEL_NAME'],
     'messages' => $messages,
     'max_tokens' => 512,
+    'stream_options' => [ 'include_usage' => true ],
 ]);
 
 header('Content-Type: text/event-stream');
@@ -134,7 +133,9 @@ $data = [
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
 ];
+$usage = null;
 foreach ($stream as $result) {
+    $usage = $result?->usage;
     if ($newContent = ($result['choices'][0]['delta']['content'] ?? false)) {
         $data['message'] .= str_replace('ß', 'ss', $newContent);
     }
@@ -154,7 +155,7 @@ $dbname = $_ENV['MYSQL_DATABASE'];
 $user = $_ENV['MYSQL_USER'];
 $password = $_ENV['MYSQL_PASSWORD'];
 if ($host && $dbname && $user && $password) {
-    $cost = calculateCost($messages[0]['content'] . "\n" . $messages[1]['content'], $data['message']);
+    $cost = calculateCost($usage);
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);

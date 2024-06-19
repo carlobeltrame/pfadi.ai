@@ -1,6 +1,6 @@
 {
     "require": {
-        "openai-php/client": "^0.6.4",
+        "openai-php/client": "^0.10.1",
         "symfony/http-client": "^6.3",
         "nyholm/psr7": "^1.8",
         "vlucas/phpdotenv": "^5.5",
