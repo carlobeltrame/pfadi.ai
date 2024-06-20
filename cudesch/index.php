@@ -209,6 +209,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   <ul>
     <li><a href="https://pfadinamen.app">pfadinamen</a></li>
     <li><a href="/samstag">samstag</a></li>
+    <li><a href="/la">LA</a></li>
     <li><a href="/kursblock">kursblock</a></li>
     <li><a href="/cudesch">cudesch</a></li>
   </ul>
