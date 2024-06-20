@@ -96,7 +96,6 @@ Story: Wir helfen einem Schmied, dessen Hammer geklaut wurde. Unterwegs finden w
 ];
 $example = $examples[$_GET['target_group']] ?? $examples['wolfsstufe'];
 if (is_array($example)) {
-    if (count($example) == 1) $example = $example[0];
     $example = join("\n\nWeiteres Beispiel:\n", $example);
 }
 

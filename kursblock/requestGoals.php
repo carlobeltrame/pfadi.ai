@@ -113,7 +113,6 @@ Blockziele:
 ];
 $example = $examples[$_GET['age_group']] ?? $examples['16-17_basis'];
 if (is_array($example)) {
-    if (count($example) == 1) $example = $example[0];
     $example = join("\n\nWeiteres Beispiel:\n", $example);
 }
 

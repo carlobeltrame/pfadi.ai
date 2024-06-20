@@ -154,7 +154,6 @@ $example = $examples[$_GET['age_group']] ?? $examples['16-17_basis'];
 $motto = $_GET['motto'] ?? '';
 $example = $example[strlen($motto) > 0 ? 'with_motto' : 'without_motto'] ?? $example['without_motto'];
 if (is_array($example)) {
-    if (count($example) == 1) $example = $example[0];
     $example = join("\n\nWeiteres Beispiel:\n", $example);
 }
 
