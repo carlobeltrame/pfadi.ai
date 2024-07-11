@@ -291,6 +291,7 @@ $data = [
     'finished' => false,
     'topic' => $topic,
     'targetGroup' => $targetGroup,
+    'motto' => $motto,
     'timeframe' => $timeframe,
     'scaffold' => $scaffold,
     'uuid' => uniqid(),
@@ -322,7 +323,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO la_programme (topic, target_group, timeframe, scaffold, programme, cost) VALUES (?,?,?,?,?,?)";
+    $sql = "INSERT INTO la_programme (topic, target_group, motto, timeframe, scaffold, programme, cost) VALUES (?,?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['topic'], $data['targetGroup'], $data['timeframe'], $data['scaffold'], $data['message'], $cost]);
+    $stmt->execute([$data['topic'], $data['targetGroup'], $data['motto'], $data['timeframe'], $data['scaffold'], $data['message'], $cost]);
 }

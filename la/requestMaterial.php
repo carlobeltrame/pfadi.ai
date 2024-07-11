@@ -56,6 +56,7 @@ $targetGroupDescriptions = [
 ];
 $targetGroupDescription = $targetGroupDescriptions[$_GET['target_group']] ?? $targetGroupDescriptions['pfadistufe'];
 
+$motto = $_GET['motto'] ?? 'keine (einfach nur die Lerninhalte spielerisch behandeln)';
 $timeframe = $_GET['timeframe'];
 
 $examples = [
@@ -287,6 +288,7 @@ $data = [
     'finished' => false,
     'topic' => $topic,
     'targetGroup' => $targetGroup,
+    'motto' => $motto,
     'timeframe' => $timeframe,
     'scaffold' => $scaffold,
     'programme' => $programme,
@@ -319,7 +321,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO la_material (topic, target_group, timeframe, scaffold, programme, material, cost) VALUES (?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO la_material (topic, target_group, motto, timeframe, scaffold, programme, material, cost) VALUES (?,?,?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['topic'], $data['targetGroup'], $data['timeframe'], $data['scaffold'], $data['programme'], $data['message'], $cost]);
+    $stmt->execute([$data['topic'], $data['targetGroup'], $data['motto'], $data['timeframe'], $data['scaffold'], $data['programme'], $data['message'], $cost]);
 }

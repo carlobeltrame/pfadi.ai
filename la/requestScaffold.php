@@ -173,6 +173,7 @@ $data = [
     'finished' => false,
     'topic' => $topic,
     'targetGroup' => $targetGroup,
+    'motto' => $motto,
     'timeframe' => $timeframe,
     'uuid' => uniqid(),
     'date' => date("Y-m-d H:i:s"),
@@ -203,7 +204,7 @@ if ($host && $dbname && $user && $password) {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=UTF8";
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
     $pdo = new PDO($dsn, $user, $password, $options);
-    $sql = "INSERT INTO la_scaffolds (topic, target_group, timeframe, scaffold, cost) VALUES (?,?,?,?,?)";
+    $sql = "INSERT INTO la_scaffolds (topic, target_group, motto, timeframe, scaffold, cost) VALUES (?,?,?,?,?,?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$data['topic'], $data['targetGroup'], $data['timeframe'], $data['message'], $cost]);
+    $stmt->execute([$data['topic'], $data['targetGroup'], $data['motto'], $data['timeframe'], $data['message'], $cost]);
 }
