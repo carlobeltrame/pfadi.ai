@@ -269,7 +269,7 @@ Beispiel:
 {$example}
 
 Schreibe nun das Detailprogramm für die folgende Lageraktivität. Sei dabei so konkret wie möglich, beschreibe Spielregeln und allfällige Rätsel, und liste konkrete inhaltliche Punkte auf, mit denen man sich in der Aktivität beschäftigt.
-Gib ausschiesslich den Text des Detailprogramms aus, wie im Beispiel oben. Wiederhole die Metadaten (Lerninhalte, Durchführungszeit, Story-Kontext, grober Ablauf) nicht und lass auch das Präfix \"Programm:\" weg.
+Gib ausschiesslich den Text des Detailprogramms aus, wie im Beispiel oben. Wiederhole nicht die Metadaten (Lerninhalte, Durchführungszeit, Story-Kontext, grober Ablauf) und lass auch das Präfix \"Programm:\" weg.
 Falls die vorgegebenen Daten die Einhaltung der 5 Regeln für eine Lageraktivität unmöglich machen, erkläre stattdessen, warum das so ist." ],
     ['role' => 'user', 'content' => "Lerninhalte: {$topic}\nDurchführungszeit: {$timeframe}\nStory-Kontext: {$motto}\nGrober Ablauf:\n{$scaffold}\n\nProgramm:\n"],
 ];

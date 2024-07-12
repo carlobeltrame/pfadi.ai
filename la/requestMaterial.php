@@ -283,7 +283,6 @@ header('Connection: keep-alive');
 header('X-Accel-Buffering: no');
 
 $data = [
-    'foo' => 'bar',
     'message' => '',
     'finished' => false,
     'topic' => $topic,

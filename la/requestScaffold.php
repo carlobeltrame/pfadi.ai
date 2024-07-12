@@ -151,7 +151,7 @@ Beispiel:
 {$example}
 
 Schreibe nun einen groben Ablauf für die folgende Lageraktivität. Vermeide eine einfache Reflexion am Ende des Programms, die TN sollten wenn dann eher durch ein Spiel oder durch die Story zum reflektieren angeregt werden, nicht direkt danach gefragt werden.
-Gib ausschiesslich den Text des groben Ablaufs aus, wie im Beispiel oben. Wiederhole die Metadaten (Lerninhalte, Durchführungszeit, Story-Kontext) nicht und lass auch das Präfix \"Grober Ablauf:\" weg.
+Gib ausschiesslich den Text des groben Ablaufs aus, wie im Beispiel oben. Wiederhole nicht die Metadaten (Lerninhalte, Durchführungszeit, Story-Kontext) und lass auch das Präfix \"Grober Ablauf:\" weg.
 Falls die vorgegebenen Daten die Einhaltung der 5 Regeln für eine Lageraktivität unmöglich machen, erkläre stattdessen, warum das so ist." ],
     ['role' => 'user', 'content' => "Lerninhalte: {$topic}\nDurchführungszeit: {$timeframe}\nStory-Kontext: {$motto}\nGrober Ablauf:\n"],
 ];

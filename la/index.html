@@ -57,10 +57,9 @@
     const timeframe = document.querySelector('#timeframe')
     const targetGroup = document.querySelector('#target_group')
     const defaultTimeframes = {
-      biberstufe: 'Samstagnachmittag 14:00 bis 16:00',
-      wolfsstufe: 'Samstagnachmittag 14:00 bis 16:30',
-      pfadistufe: 'Samstagnachmittag 14:00 bis 16:30',
-      piostufe: 'Samstagnachmittag 14:00 bis 17:00',
+      wolfsstufe: 'Sommerlager, 10:00 bis 11:30',
+      pfadistufe: 'Sommerlager, 10:00 bis 11:30',
+      piostufe: 'Sommerlager, 10:00 bis 11:30',
     }
     const previousDefaultTimeframe = defaultTimeframes[previousTargetGroup]
     const newDefaultTimeframe = defaultTimeframes[targetGroup.value]
@@ -76,7 +75,7 @@
   }
 
   function saveScaffold(data) {
-    const key = 'samstag-history-scaffold'
+    const key = 'la-history-scaffold'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -85,7 +84,7 @@
 
   function loadScaffold(event) {
     const uuid = event.target.value
-    const key = 'samstag-history-scaffold'
+    const key = 'la-history-scaffold'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -94,7 +93,7 @@
   }
 
   function retrieveScaffold() {
-    const key = 'samstag-history-scaffold'
+    const key = 'la-history-scaffold'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
@@ -157,7 +156,7 @@
   }
 
   function saveProgramme(data) {
-    const key = 'samstag-history-programme'
+    const key = 'la-history-programme'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -166,7 +165,7 @@
 
   function loadProgramme(event) {
     const uuid = event.target.value
-    const key = 'samstag-history-programme'
+    const key = 'la-history-programme'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -175,7 +174,7 @@
   }
 
   function retrieveProgramme() {
-    const key = 'samstag-history-programme'
+    const key = 'la-history-programme'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
@@ -239,7 +238,7 @@
   }
 
   function saveMaterial(data) {
-    const key = 'samstag-history-material'
+    const key = 'la-history-material'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -248,7 +247,7 @@
 
   function loadMaterial(event) {
     const uuid = event.target.value
-    const key = 'samstag-history-material'
+    const key = 'la-history-material'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -257,7 +256,7 @@
   }
 
   function retrieveMaterial() {
-    const key = 'samstag-history-material'
+    const key = 'la-history-material'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
