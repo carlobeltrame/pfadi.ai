@@ -36,7 +36,7 @@
   function setRandomTopic(forceOverwrite = false) {
     const topic = document.querySelector('#topic')
     if (forceOverwrite || topic.value === '') {
-      const topicExamples = ['Wanderplanung', 'Kartenlesen', 'NORDA', 'Koordinaten', 'Krokieren', 'Kompass', 'GPS', 'Höhenmesser', 'Orientieren im Gelände', 'Sicherheit bei Aktivitäten im Lager', 'Unfallorganisation und Alarmierung', 'Erste Hilfe', 'Lebensrettende Sofortmassnahmen', 'Wundversorgung', 'Sicherheitsüberlegungen in der Pfadi', 'Tier- und Pflanzenwelt', 'Umweltschutz im Lager', 'Recycling im Lager', 'Wetterkunde', 'Sternkunde', 'Übermittlungstechniken', 'Morsen', 'Feuer machen', 'Biwakbau', 'Iglubau', 'Materialkunde', 'Ausrüstungskunde', 'Materialpflege', 'Erstellen von Pionierbauten', 'Abbau von Pionierbauten', 'Seilkunde', 'Knotenkunde', 'Seilbahnen', 'Seilbrücken', 'Abseilen', 'Einrichten von Lagerplatz und Umgebung', 'Lagerabbau', 'Erstellen von Spielplatzeinrichtungen und Sportgeräten', 'Blachenzelte bauen', 'Sauna aus Blachen bauen', 'Hängematten aus Blachen bauen', 'Suchtprävention', 'Gewaltprävention', 'Diversität und Inklusion', 'Kulturelle Vielfalt', 'Personen mit Migrationshintergrund in der Pfadi']
+      const topicExamples = ['Volleyball', 'Ball über die Schnur', 'Fussball', 'Geländegame', 'Capture the Flag', 'Völkerball', 'Kooperationsspiele', 'Raufspiele', 'New Games (Spiele ohne Gewinner)', 'Fangis', 'Mattenlauf', 'Rugby', 'OL', 'Handball', 'Parkour', 'Schwingen', 'Räuber und Bulle', 'Morgensport', 'Unihockey', 'Basketball', 'Baseball', 'Badminton', 'Slackline', 'Ultimate Frisbee', 'Tanzen', 'Multi-Sport-Turnier', 'Highland Games']
       topic.value = topicExamples[Math.floor(Math.random() * topicExamples.length)]
       const scaffold = document.querySelector('#scaffold')
       const programme = document.querySelector('#programme')
@@ -75,7 +75,7 @@
   }
 
   function saveScaffold(data) {
-    const key = 'la-history-scaffold'
+    const key = 'ls-history-scaffold'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -84,7 +84,7 @@
 
   function loadScaffold(event) {
     const uuid = event.target.value
-    const key = 'la-history-scaffold'
+    const key = 'ls-history-scaffold'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -93,7 +93,7 @@
   }
 
   function retrieveScaffold() {
-    const key = 'la-history-scaffold'
+    const key = 'ls-history-scaffold'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
@@ -156,7 +156,7 @@
   }
 
   function saveProgramme(data) {
-    const key = 'la-history-programme'
+    const key = 'ls-history-programme'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -165,7 +165,7 @@
 
   function loadProgramme(event) {
     const uuid = event.target.value
-    const key = 'la-history-programme'
+    const key = 'ls-history-programme'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -174,7 +174,7 @@
   }
 
   function retrieveProgramme() {
-    const key = 'la-history-programme'
+    const key = 'ls-history-programme'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
@@ -238,7 +238,7 @@
   }
 
   function saveMaterial(data) {
-    const key = 'la-history-material'
+    const key = 'ls-history-material'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     stored.push(data)
     localStorage.setItem(key, JSON.stringify(stored))
@@ -247,7 +247,7 @@
 
   function loadMaterial(event) {
     const uuid = event.target.value
-    const key = 'la-history-material'
+    const key = 'ls-history-material'
     const stored = JSON.parse(localStorage.getItem(key)) || []
     const entry = stored.find(entry => entry.uuid === uuid)
     if (entry) {
@@ -256,7 +256,7 @@
   }
 
   function retrieveMaterial() {
-    const key = 'la-history-material'
+    const key = 'ls-history-material'
     return JSON.parse(localStorage.getItem(key)) || []
   }
 
@@ -365,16 +365,16 @@
 
 <main id="main">
 <div class="font-sans">
-  <h2>LA-AI</h2>
+  <h2>LS-AI</h2>
 </div>
 
 <article id="block" class="generator-article">
   <form id="scaffold_form" onsubmit="return requestScaffold(event)">
     <div class="generator-input-group">
-      <label for="topic" class="generator-label">Lerninhalte <small><a href="https://pfadi.swiss/media/files/94/20131126brolstgrundlagen.pdf#page=11" target="_blank">[aus den fixen J+S-Themenbereichen]</a></small></label>
+      <label for="topic" class="generator-label">Sportart</label>
       <div class="generator-input-with-addons">
         <input type="text" id="topic" name="topic" class="generator-input" required maxlength="128">
-        <button type="button" id="randomize_topic" class="generator-input-addon" onclick="setRandomTopic(true)">Zufällige Inhalte</button>
+        <button type="button" id="randomize_topic" class="generator-input-addon" onclick="setRandomTopic(true)">Zufällige Sportart</button>
       </div>
     </div>
     <div class="generator-input-group">
@@ -394,7 +394,7 @@
       <input type="text" id="timeframe" name="timeframe" class="generator-input" required maxlength="128" value="Sommerlager, 10:00 bis 11:30">
     </div>
     <div class="generator-submit-row">
-      <button id="scaffold_submit" type="submit" class="generator-submit">Groben Ablauf generieren und 2 Rappen von Cosinus verbrauchen</button>
+      <button id="scaffold_submit" type="submit" class="generator-submit">Groben Ablauf generieren und 1 Rappen von Cosinus verbrauchen</button>
       <div id="scaffold_spinner" class="lds-dual-ring hidden"></div>
     </div>
   </form>
@@ -410,7 +410,7 @@
     <label for="programme" class="generator-label">Detailprogramm</label>
     <textarea id="programme" name="programme" class="generator-input" rows="20" required="required"></textarea>
     <div class="generator-submit-row">
-      <button id="material_submit" type="submit" class="generator-submit">Benötigtes Material auflisten und 3 Rappen von Cosinus verbrauchen</button>
+      <button id="material_submit" type="submit" class="generator-submit">Benötigtes Material auflisten und 1 Rappen von Cosinus verbrauchen</button>
       <div id="material_spinner" class="lds-dual-ring hidden"></div>
     </div>
   </form>
@@ -439,7 +439,7 @@
 </select>
 </p>
 <p>
-  <label for="material_history_select">Vollständige LA-Blöcke inkl. Material wieder aufrufen</label>
+  <label for="material_history_select">Vollständige LS-Blöcke inkl. Material wieder aufrufen</label>
   <select id="material_history_select" class="generator-history-select" onchange="loadMaterial(event)">
     <option value="0">-</option>
   </select>

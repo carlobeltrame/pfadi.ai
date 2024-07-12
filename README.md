@@ -6,6 +6,7 @@ So far we have the following tools:
 
 - **[pfadinamen.app](https://pfadinamen.app)**, which is maintained in a [separate repository](https://github.com/carlobeltrame/pfadinamen), is a [char-rnn](http://karpathy.github.io/2015/05/21/rnn-effectiveness/) trained on scout names, which can generate novel scout names and look up the meanings of similar known names on [pfadinamen.ch](https://pfadinamen.ch).
 - **[samstag](https://pfadi.ai/samstag)** (code in [`/samstag`](https://github.com/carlobeltrame/pfadi.ai/tree/main/samstag)) is an LLM chain (currently based on GPT-4o) for generating stories and programme for weekly scouting events.
+- **[LS](https://pfadi.ai/ls)** (code in [`/ls`](https://github.com/carlobeltrame/pfadi.ai/tree/main/ls)) is an LLM chain (currently based on GPT-4o) for generating scaffolds and programme for J+S Lagersportblöcke in J+S camps.
 - **[LA](https://pfadi.ai/la)** (code in [`/la`](https://github.com/carlobeltrame/pfadi.ai/tree/main/la)) is an LLM chain (currently based on GPT-4o) for generating scaffolds and programme for J+S Lageraktivitäten in J+S camps.
 - **[kursblock](https://pfadi.ai/kursblock)** (code in [`/kursblock`](https://github.com/carlobeltrame/pfadi.ai/tree/main/kursblock)) is an LLM chain (currently based on GPT-4o) for generating goals and programme for scouting courses.
 - **[cudesch](https://pfadi.ai/cudesch)** (code in [`/cudesch`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch) and [`/cudesch-indexer`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch-indexer)) is a search engine providing a semantic search over a selection of brochures and other literature which is commonly used in scout courses.
@@ -22,7 +23,7 @@ The code is deliberately kept simple and currently contains lots of code duplica
 
 This is a static webpage which serves a pre-trained char-rnn. The neural network is run directly in the browser using [tensorflow.js](https://www.tensorflow.org/js). For this reason, there are no hosting or evaluation costs incurred. You can use this as much as you want free of charge, even without internet connection.
 
-### samstag, LA and kursblock
+### samstag, LS, LA and kursblock
 
 These tools share a very similar architecture. They work by issuing a chat completion API call to the ChatGPT API (specifically GPT-4o) which includes the user input and 1-2 desired examples. This API call is authenticated via a (secret) API token, which is why these tools have PHP backend components. The responses from the API are streamed to the frontend (using [server sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)) and displayed there. A history of old generations is stored in the client's local storage, and all generated content is also stored in a database using [PDO](https://www.php.net/manual/en/book.pdo.php), for later analysis and cost control.
 
@@ -55,20 +56,21 @@ git submodule init && git submodule update
 
 Advanced: In case the pfadinamen.app repo has new commits, you can update the submodule reference using `git submodule update --remote`.
 
-### samstag, LA and kursblock
-For the samstag, LA and kursblock tools, you will need an [OpenAI API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key). Create a copy of samstag/.env.example called samstag/.env (and vice versa for LA and kursblock) and fill in your API key in there.
+### samstag, LS, LA and kursblock
+For the samstag, LS, LA and kursblock tools, you will need an [OpenAI API key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key). Create a copy of samstag/.env.example called samstag/.env (and vice versa for LS, LA and kursblock) and fill in your API key in there.
 
 **Note:** To have access to the GPT-4 and GPT-4o API, currently you will need to have made a successful payment of [at least 5 USD](https://help.openai.com/en/articles/7102672-how-can-i-access-gpt-4-gpt-4-turbo-and-gpt-4o) to OpenAI. If you don't have such an OpenAI account, you can change the model name in your .env files to `gpt-3.5-turbo-1106`, but you might face worse output quality with GPT-3.5 Turbo as opposed to GPT-4o.
 
 Next, you will have to install the PHP dependencies:
 ```bash
 (cd samstag && composer install)
+(cd ls && composer install)
 (cd la && composer install)
 (cd kursblock && composer install)
 ```
 
 If you want to test or set up the database saving part of the tools, you will have to run a MySQL or MariaDB database locally and fill in the credentials in your .env files.
-Inside the database, execute the SQL scripts samstag/db-setup.sql, la/db-setup.sql and kursblock/db-setup.sql. For now, due to the lack of a framework, we don't have a migration mechanism. So if something about these SQL script is changed upstream, you will have to apply these changes manually to your database.
+Inside the database, execute the SQL scripts samstag/db-setup.sql, ls/db-setup.sql, la/db-setup.sql and kursblock/db-setup.sql. For now, due to the lack of a framework, we don't have a migration mechanism. So if something about these SQL script is changed upstream, you will have to apply these changes manually to your database.
 
 ### cudesch
 
