@@ -278,6 +278,6 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
 </main>
 
 <footer>
-  <p>&copy; 2023 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>
+  <p>&copy; 2025 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>
 </footer>
 </body>
