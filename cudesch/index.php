@@ -266,7 +266,7 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
   Achtung: Für die Korrektheit und Relevanz der gefundenen Inhalte wird keinerlei Garantie übernommen. Die Texte sollten in jedem Fall noch von erfahrenen Kursleitenden gegengelesen werden. Diese Suche ist ein Experiment, wie weit die aktuellen AI-Tools bereits für Pfadi-Themen nutzbar sind.
 </p>
 <p><small>
-  Bitte keine personenbezogenen Daten in die Felder eingeben. Alle gefundenen Inhalte und dazugehörigen Eingaben werden beim Suchen zur Qualitätssicherung und Kontrolle der Kosten serverseitig gespeichert.
+  Bitte keine personenbezogenen Daten in die Felder eingeben. Alle gefundenen Inhalte und dazugehörigen Eingaben werden beim Suchen zur Qualitätssicherung, Kontrolle der Kosten und Weiterentwicklung der pfadi.ai Tools serverseitig gespeichert.
 </small></p>
 <p>
 <label for="literature_history_select">Bereits gefundene Literatur wieder aufrufen</label>
@@ -278,6 +278,6 @@ usort($documents, function ($a, $b) { return $a['name'] <=> $b['name']; });
 </main>
 
 <footer>
-  <p>&copy; 2023 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>
+  <p>&copy; 2025 pfadi.ai - AI Tools für die Pfadi. <a href="https://github.com/carlobeltrame/pfadi.ai" target="_blank">Code auf GitHub</a></p>
 </footer>
 </body>
