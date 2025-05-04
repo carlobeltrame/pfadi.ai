@@ -6,20 +6,20 @@ $dotenv->load();
 
 $slugify = new Cocur\Slugify\Slugify();
 
-$supabase = new Supabase\CreateClient($_ENV['SUPABASE_API_KEY'], $_ENV['SUPABASE_PROJECT_ID']);
+$supabase = new PHPSupabase\Service($_ENV['SUPABASE_API_KEY'], $_ENV['SUPABASE_PROJECT_URL']);
 
 $documents = [];
 
 try {
-  $documentsResponse = $supabase->from('document_names')->select()->execute();
+  $documentsResponse = $supabase->initializeDatabase('document_names', 'document_name')->fetchAll()->getResult();
 
   $documents = array_map(function($d) use ($slugify) {
     return [
-      'slug' => $slugify->slugify($d['document_name']),
-      'name' => $d['document_name'],
-      'source' => $d['source'],
+      'slug' => $slugify->slugify($d->document_name),
+      'name' => $d->document_name,
+      'source' => $d->source,
     ];
-  }, $documentsResponse->data);
+  }, $documentsResponse);
 } catch(Error) {
   // Supabase project is currently unavailable
 }

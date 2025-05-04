@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$supabase = new Supabase\CreateClient($_ENV['SUPABASE_API_KEY'], $_ENV['SUPABASE_PROJECT_ID']);
+$supabase = new PHPSupabase\Service($_ENV['SUPABASE_API_KEY'], $_ENV['SUPABASE_PROJECT_URL']);
 
 $client = OpenAI::factory()
     ->withApiKey($_ENV['OPENAI_API_KEY'])
@@ -64,7 +64,7 @@ function combineChapterPieces($pieces) {
 }
 
 function combineLiterature($data, $maxChapters = 3) {
-    $withoutEmbeddings = array_map(function ($chapterPiece) { return array_merge($chapterPiece, ['embedding' => '(cut)' ]); }, $data);
+    $withoutEmbeddings = array_map(function ($chapterPiece) { return array_merge(json_decode(json_encode($chapterPiece), true), ['embedding' => '(cut)' ]); }, $data);
 
     $groupedByChapter = [];
     foreach($withoutEmbeddings as $chapterPiece) {
@@ -119,12 +119,12 @@ $embeddingResponse = $client->embeddings()->create([
 ]);
 $queryEmbedding = $embeddingResponse->embeddings[0]->embedding;
 
-$chaptersResponse = $supabase->rpc('match_chapters', [
+$chaptersResponse = $supabase->executeHttpRequest('POST', $_ENV['SUPABASE_PROJECT_URL'] . '/rest/v1/rpc/match_chapters', ['headers' => $supabase->getHeaders(), 'body' => json_encode([
     'query_embedding' => $queryEmbedding,
     'match_count' => 20,
     'document_names' => $documents,
-])->execute();
-[$literature, $markdown] = combineLiterature($chaptersResponse->data, 3);
+])]);
+[$literature, $markdown] = combineLiterature($chaptersResponse, 3);
 
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
