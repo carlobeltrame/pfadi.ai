@@ -9,7 +9,7 @@ So far we have the following tools:
 - **[LS](https://pfadi.ai/ls)** (code in [`/ls`](https://github.com/carlobeltrame/pfadi.ai/tree/main/ls)) is an LLM chain (currently based on GPT-4o) for generating scaffolds and programme for J+S Lagersportblöcke in J+S camps.
 - **[LA](https://pfadi.ai/la)** (code in [`/la`](https://github.com/carlobeltrame/pfadi.ai/tree/main/la)) is an LLM chain (currently based on GPT-4o) for generating scaffolds and programme for J+S Lageraktivitäten in J+S camps.
 - **[kursblock](https://pfadi.ai/kursblock)** (code in [`/kursblock`](https://github.com/carlobeltrame/pfadi.ai/tree/main/kursblock)) is an LLM chain (currently based on GPT-4o) for generating goals and programme for scouting courses.
-- **[cudesch](https://pfadi.ai/cudesch)** (code in [`/cudesch`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch) and [`/cudesch-indexer`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch-indexer)) is a search engine providing a semantic search over a selection of brochures and other literature which is commonly used in scout courses.
+- **[cudesch](https://pfadi.ai/cudesch)** CURRENTLY NOT FUNCTIONAL (code in [`/cudesch`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch) and [`/cudesch-indexer`](https://github.com/carlobeltrame/pfadi.ai/tree/main/cudesch-indexer)) is a search engine providing a semantic search over a selection of brochures and other literature which is commonly used in scout courses.
 
 If you have an idea for a new tool or want to help by providing more example data, feel free to contact me at: cosinus at gryfensee dot ch.
 
